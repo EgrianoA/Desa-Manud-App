@@ -1,15 +1,24 @@
-import express, { Express, Request, Response , Application } from 'express';
-import dotenv from 'dotenv';
+import express, { Express, Request, Response, Application } from "express";
+import dotenv from "dotenv";
+import mongoose, { ConnectOptions } from "mongoose";
+import router from "./routers";
 
-//For env File 
+//For env File
 dotenv.config();
 
-const app: Application = express();
-const port = process.env.PORT || 3001;
+const app: Express = express();
+const port: string | number = process.env.PORT || 3001;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
-});
+mongoose
+  .connect(process.env.MONGO_URI as string, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as ConnectOptions)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+
+app.use(express.json());
+app.get("/api", router);
 
 app.listen(port, () => {
   console.log(`Server is running at ${port}`);
