@@ -4,17 +4,16 @@ FROM node:14
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to leverage Docker cache
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Bundle app source inside the Docker image
+# Bundle app source inside Docker image
 COPY . .
 
-# Express app listens on port 3000 by default
-EXPOSE 3000
+# Your app binds to port 3001
+EXPOSE 3001
 
-# Define the command to run your app
-CMD [ "node", "app.js" ]
+CMD [ "node", "run", "dev" ]
