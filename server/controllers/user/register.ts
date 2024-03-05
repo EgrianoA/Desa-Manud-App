@@ -1,18 +1,70 @@
-import { Request, Response } from 'express';
-import User, { IUser } from '../../models/User';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { Request, Response } from "express";
+import User, { IUser, IUserData, UserRole } from "../../models/User";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { isEmpty, pick } from "lodash";
+
+type UserRegisterType = Pick<
+  IUser,
+  "email" | "password" | "role" | "userFullName" | "username"
+>;
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
-    let user = await User.findOne({ username });
-    if (user) return res.status(400).json({ message: "User already exists" });
+    const { username, email, userFullName, password, role }: UserRegisterType =
+      req.body;
 
-    user = new User({ username, password });
-    await user.save();
+    if (
+      isEmpty(username) ||
+      isEmpty(email) ||
+      isEmpty(userFullName) ||
+      isEmpty(password)
+    ) {
+      return res.status(400).json({ message: "Mandatory fields required" });
+    }
 
-    res.status(201).json({ message: "User created successfully" });
+    const isFoundEmail = await User.findOne({
+      email: { $regex: new RegExp(req.body.email, "i") },
+    });
+    if (isFoundEmail) {
+      return res.status(400).json({ message: "Email already used" });
+    }
+
+    const isFoundUsername = await User.findOne({
+      username: { $regex: new RegExp(req.body.username, "i") },
+    });
+    if (isFoundUsername) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    const newUserData: UserRegisterType = {
+      username,
+      email,
+      userFullName,
+      password: bcrypt.hashSync(password, 12),
+      role: isEmpty(role) ? UserRole.PublicUser : role,
+    };
+
+    const newUserRecord = await User.create(newUserData);
+
+    
+    const returnValue: IUserData = pick(newUserRecord, [
+      "username",
+      "email",
+      "userFullName",
+      "role",
+    ]);
+
+    const token = jwt.sign(
+      { userData: returnValue },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+
+    res.status(201).json({ data: { user: returnValue, token: token } });
   } catch (err) {
     res.status(500).json({ message: err });
   }

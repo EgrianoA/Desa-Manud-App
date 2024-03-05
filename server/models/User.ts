@@ -1,20 +1,50 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface IUser extends Document {
-  username: string;
-  password: string;
+export enum UserRole {
+  SuperAdmin = "superAdmin",
+  Admin = "admin",
+  PublicUser = "publicUser",
 }
 
-const UserSchema: Schema = new Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
-});
+export type IUser = {
+  username: string;
+  password: string;
+  email: string;
+  userFullName: string;
+  role: UserRole;
+};
 
-UserSchema.pre<IUser>('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
-});
+export type IUserData = Pick<
+  IUser,
+  "email" | "role" | "userFullName" | "username"
+>;
 
-export default mongoose.model<IUser>('User', UserSchema);
+type IUserDocument = Document & IUser;
+
+const UserSchema: Schema = new Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    userFullName: { type: String, required: true },
+    role: {
+      type: String,
+      default: UserRole.PublicUser,
+      enum: Object.values(UserRole),
+      required: true,
+    },
+    createdDate: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedDate: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.model<IUserDocument>("User", UserSchema);

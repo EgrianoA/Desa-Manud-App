@@ -1,6 +1,8 @@
 {
-    "watch": ["src"],
-    "ext": "ts",
-    "ignore": ["src/**/*.spec.ts"],
-    "exec": "ts-node ./server.ts"
-  }
+  "verbose": true,
+  "watch": ["*.ts"],
+  "ignore": ["*.spec.ts"],
+  "exec": "ts-node ./server.ts",
+  "pollingInterval": 100,
+  "legacyWatch": true
+}

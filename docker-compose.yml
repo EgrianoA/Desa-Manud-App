@@ -1,29 +1,11 @@
 version: "3.5"
 
 services:
-  app:
-    container_name: app
-    build:
-      context: ./app/desa-manud-app
-    ports:
-      - "4000:3000"
-
-  server:
-    container_name: server
-    build:
-      context: ./server
-    ports:
-      - "3001:3001"
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/desa-manud
-
   mongo:
     image: mongo:6.0.1
     environment:
       MONGO_INITDB_ROOT_USERNAME: dtpl-db
-      MONGO_INITDB_ROOT_PASSWORD: DTPLdb@2024!
+      MONGO_INITDB_ROOT_PASSWORD: DTPLdb-2o24
     ports:
       - 27017:27017
 
