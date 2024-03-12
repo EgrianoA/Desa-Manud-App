@@ -30,13 +30,6 @@ JWT_SECRET=DTPLtask@2024!`
 7. Open terminal (CMD) on the app folder, then do npm install, and run it with npm run dev
 8. Open another terminal on server folder, to the npm install also and run the server with npm run dev
 9. The server will running on localhost:3001 and the frontend will be on localhost:3000
-
-Note: 
-To login, use : 
-username : testinguser@test.com
-password : abc123
-
-Or you can just signup as new user
 ```
 
 ## Running the tests
