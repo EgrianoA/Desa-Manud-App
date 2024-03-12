@@ -1,6 +1,6 @@
 {
   "verbose": true,
-  "watch": ["*.ts"],
+  "watch": ["./**/*.ts"],
   "ignore": ["*.spec.ts"],
   "exec": "ts-node ./server.ts",
   "pollingInterval": 100,

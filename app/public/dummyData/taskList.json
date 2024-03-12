@@ -1,0 +1,92 @@
+[
+  {
+    "taskId": "BPKT-001",
+    "taskCategory": "TCBPK-001",
+    "taskName": "Pengujian dokumen terkait proses perencanaan dan penganggaran program/kegiatan",
+    "taskDescription": "Lakukan wawancara dan pengujian dokumen terkait proses perencanaan dan penganggaran program/kegiatan apakah telah melalui mekanisme dan  ketentuan yang berlaku"
+  },
+  {
+    "taskId": "BPKT-002",
+    "taskCategory": "TCBPK-001",
+    "taskName": "Pengujian dan reviu atas kegiatan atau pengadaan",
+    "taskDescription": "Lakukan pengujian dan reviu atas kegiatan/ barang/ jasa / kegiatan yang dibeli/ diperoleh/ dilaksanakan telah didukung dengan analisa kebutuhan/ usulan/ dokumen yang menunjukan spek/ jumlah/ jenis yang benar benar dibutuhkan diusulkan telah didukung dengan kondisi kebutuhan"
+  },
+  {
+    "taskId": "BPKT-003",
+    "taskCategory": "TCBPK-001",
+    "taskName": "Pengujian dokumen KPA terhadap PPK",
+    "taskDescription": "Lakukan pengujian dokumen apakah KPA telah menunjuk PPK yang kompeten dan memenuhi persyaratan menjadi KPA (sertifikasi keahlian)"
+  },
+  {
+    "taskId": "BPKT-004",
+    "taskCategory": "TCBPK-001",
+    "taskName": "Pemeriksaan kegiatan/pengadaan terhadap RUP",
+    "taskDescription": "Lakukan pemeriksaan apakah seluruh kegiatan/pengadaan telah didukung oleh RUP."
+  },
+  {
+    "taskId": "BPKT-005",
+    "taskCategory": "TCBPK-001",
+    "taskName": "Pengujian atas RUP dan SiRUP",
+    "taskDescription": "Lakukan pengujian atas RUP dan SiRUP, lakukan wawancara mengenai alasan pemilihan metode pengadaan oleh KPA."
+  },
+  {
+    "taskId": "BPKT-006",
+    "taskCategory": "TCBPK-002",
+    "taskName": "Pemeriksaan atas SK KPA",
+    "taskDescription": "Lakukan pemeriksaan atas SK KPA telah penunjuk Pokja Pemilihan/Pejabat pengadaan/Panitia Pengadaan untuk memperoleh dasar penugasan dan memastikan kompetensi PPK dan Pokja/Pejabat/Panita."
+  },
+  {
+    "taskId": "BPKT-007",
+    "taskCategory": "TCBPK-002",
+    "taskName": "Pengecekan terhadap daftar peserta pelelangan",
+    "taskDescription": "Teliti daftar peserta pelelangan yang sudah mendaftarkan diri kepada Panitia, apakah kepada para peserta telah dilakukan prakualifikasi untuk menentukan boleh tidaknya peserta tersebut mengikuti pelelangan dengan cara meminta daftar calon peserta yang telah lulus prakualifikasi"
+  },
+  {
+    "taskId": "BPKT-008",
+    "taskCategory": "TCBPK-002",
+    "taskName": "Pengujian dokumen terkait Pokja Pemilihan/Pejabat/Panitia",
+    "taskDescription": "Lakukan pengujian dokumen dan wawancara untuk membuktikan bahwa Pokja Pemilihan/Pejabat/Panitia telah melaksanakan tahapan pengadaan sesuai dengan ketentuan dan secara tepat waktu."
+  },
+  {
+    "taskId": "BPKT-009",
+    "taskCategory": "TCBPK-002",
+    "taskName": "Evaluasi terhadap Pokja Pemilihan/Pejabat/Panitia",
+    "taskDescription": "Lakukan wawancara untuk evaluasi/pembobotan/penilaian yang bersifat judgement untuk memperoleh alasan yang mendasarinya."
+  },
+  {
+    "taskId": "BPKT-010",
+    "taskCategory": "TCBPK-002",
+    "taskName": "Verifikasi PPK terhadap jaminan pembayaran akhir dan pemeliharaan",
+    "taskDescription": "Cek apakah PPK telah memverifikasi keabsahan setiap jaminan pembayaran akhir dan jaminan pemeliharaan."
+  },
+  {
+    "taskId": "BPKT-011",
+    "taskCategory": "TCBPK-003",
+    "taskName": "Pengecekan PPK terhadap SK",
+    "taskDescription": "Teliti apakah PPK, penguji tagihan, dan penandatangan SPM ditunjuk dengan SK serta pejabat yang ditunjuk tidak saling merangkap."
+  },
+  {
+    "taskId": "BPKT-012",
+    "taskCategory": "TCBPK-003",
+    "taskName": "Pengujian kegiatan belanja barang/modal kontraktual",
+    "taskDescription": "Lakukan pengujian kegiatan belanja barang/modal kontraktual yang telah dan sedang dilaksanakan apakah telah didukung dengan klausul Kontrak/SPK beserta kelengakapannya yang mengatur hak dan kewajiban masing-masing pihak dengan benar dan telah mengatur pengendalian PPK."
+  },
+  {
+    "taskId": "BPKT-013",
+    "taskCategory": "TCBPK-003",
+    "taskName": "Pemeriksaan doukmen dan pengujian fisik",
+    "taskDescription": "Lakukan pemeriksaan dokumen dan pengujian fisik apakah hasil pekerjaan telah sesuai dengan hal hal yang diatur dalam SPK dan dokumen pendukungnya antara lain:\n1. Jumlah yang disepakati dalam SPK;\n2. Kualitas yang disepakati dalam SPK dalam Spesifkasi teknis/KAK/Penawaran/Material Aproval; dan\n3. Pesyaratan lainnya yang telah disepakati\n4. Dilaksanakan oleh penyedia yang ditunjuk sesuai kontrak/SPK"
+  },
+  {
+    "taskId": "BPKT-014",
+    "taskCategory": "TCBPK-003",
+    "taskName": "Pengujian atas perikatan penyedia dengan sub kon",
+    "taskDescription": "Lakukan pengujian atas perikatan penyedia dengan sub kon dan sub sub kon untuk mengetahui hak dan kewajiban serta margin yang diberikan, lakukan prosedur lanjutan dengan menghubungkan adanya permasalahan dalam proses pemilihan/evaluasi proses PBJ."
+  },
+  {
+    "taskId": "BPKT-015",
+    "taskCategory": "TCBPK-003",
+    "taskName": "Lakukan pengujian atas dokumen pembayaran",
+    "taskDescription": "Lakukan pengujian atas dokumen pembayaran, apakah telah dibayarkan , dikalkulasi secara benar dan tidak melebih pagu anggaran"
+  }
+]

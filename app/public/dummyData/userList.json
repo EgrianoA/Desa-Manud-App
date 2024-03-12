@@ -1,0 +1,142 @@
+[
+  {
+    "username": "heru.budianto",
+    "employeeNumber": "BPK-021",
+    "role": "Penyidik",
+    "email": "heru.budianto@bpk.gov.id",
+    "phoneNumber": "62812345678900",
+    "fullName": "Heru Budianto",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/64.jpg",
+    "password": ""
+  },
+  {
+    "username": "agustina.widyasari",
+    "employeeNumber": "BPK-007",
+    "role": "Ketua Tim",
+    "email": "agustina.widyasari@bpk.gov.id",
+    "phoneNumber": "62812345677121",
+    "fullName": "Agustina Widyasari",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/female/23.jpg",
+    "password": ""
+  },
+  {
+    "username": "harry.darmawan",
+    "employeeNumber": "BPK-005",
+    "role": "Ketua Tim",
+    "email": "harry.darmawan@bpk.gov.id",
+    "phoneNumber": "62812382377121",
+    "fullName": "Harry Darmawan",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/74.jpg",
+    "password": ""
+  },
+  {
+    "username": "annisa.permata.s",
+    "employeeNumber": "BPK-011",
+    "role": "Admin",
+    "email": "annisa.permata.s@bpk.gov.id",
+    "phoneNumber": "62812345887121",
+    "fullName": "Annisa Permata Sari",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/female/22.jpg",
+    "password": ""
+  },
+  {
+    "username": "chintya.fadila.l",
+    "employeeNumber": "BPK-032",
+    "role": "Ketua Subtim",
+    "email": "chintya.fadila.l@bpk.gov.id",
+    "phoneNumber": "62812345887982",
+    "fullName": "Chintya Fadila Laksmitaningrum",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/female/21.jpg",
+    "password": ""
+  },
+  {
+    "username": "arief.ridhatama",
+    "employeeNumber": "BPK-041",
+    "role": "Ketua Subtim",
+    "email": "arief.ridhatama@bpk.gov.id",
+    "phoneNumber": "6281215487121",
+    "fullName": "Arief Ridhatama",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/64.jpg",
+    "password": ""
+  },
+  {
+    "username": "sigit.setiawan",
+    "employeeNumber": "BPK-057",
+    "role": "Penyidik",
+    "email": "sigit.setiawan@bpk.gov.id",
+    "phoneNumber": "62812344617121",
+    "fullName": "Sigit Setiawan",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/57.jpg",
+    "password": ""
+  },
+  {
+    "username": "abdul.rochim",
+    "employeeNumber": "BPK-018",
+    "role": "Penyidik",
+    "email": "abdul.rochim@bpk.gov.id",
+    "phoneNumber": "62812351287121",
+    "fullName": "Abdul Rochim",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/73.jpg",
+    "password": ""
+  },
+  {
+    "username": "chandra.rony",
+    "employeeNumber": "BPK-072",
+    "role": "Penyidik",
+    "email": "chandra.rony@bpk.gov.id",
+    "phoneNumber": "62812345846521",
+    "fullName": "Chandra Rony",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/71.jpg",
+    "password": ""
+  },
+  {
+    "username": "dwi.jatmika.b",
+    "employeeNumber": "BPK-068",
+    "role": "Penyidik",
+    "email": "dwi.jatmika.b@bpk.gov.id",
+    "phoneNumber": "6281299187121",
+    "fullName": "Dwi Jatmika Bima",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/61.jpg",
+    "password": ""
+  },
+  {
+    "username": "eky.fadillah",
+    "employeeNumber": "BPK-051",
+    "role": "Penyidik",
+    "email": "eky.fadillah@bpk.gov.id",
+    "phoneNumber": "62812345889511",
+    "fullName": "Eky Fadillah",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/75.jpg",
+    "password": ""
+  },
+  {
+    "username": "syarif.hermawan",
+    "employeeNumber": "BPK-043",
+    "role": "Penyidik",
+    "email": "syarif.hermawan@bpk.gov.id",
+    "phoneNumber": "62812374387121",
+    "fullName": "Syarif Hermawan",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/36.jpg",
+    "password": ""
+  },
+  {
+    "username": "karina.safitri",
+    "employeeNumber": "BPK-015",
+    "role": "Admin",
+    "email": "karina.safitri@bpk.gov.id",
+    "phoneNumber": "62812345844221",
+    "fullName": "Karina Safitri",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/female/30.jpg",
+    "password": ""
+  },
+  {
+    "username": "reza.alfian",
+    "employeeNumber": "BPK-071",
+    "role": "Penyidik",
+    "email": "reza.alfian@bpk.gov.id",
+    "phoneNumber": "62812349827121",
+    "fullName": "Reza Alfian",
+    "profilePicture": "https://xsgames.co/randomusers/assets/avatars/male/58.jpg",
+    "password": ""
+  }
+]

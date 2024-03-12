@@ -1,7 +1,44 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import User, { UserRole } from "../models/User";
 
-const checkHeaders = (req: Request, res: Response, next: NextFunction) => {
+export interface IRequestWithUserData extends Request {
+  userId?: string;
+}
+
+const userHasAccess = (userRole: UserRole, accessRole?: UserRole): boolean => {
+  if (!accessRole) {
+    return true;
+  }
+
+  switch (accessRole) {
+    case UserRole.SuperAdmin: {
+      if (userRole === UserRole.SuperAdmin) {
+        return true;
+      }
+      break;
+    }
+
+    case UserRole.Admin: {
+      if (userRole === UserRole.SuperAdmin || userRole === UserRole.Admin) {
+        return true;
+      }
+      break;
+    }
+
+    default:
+      return true;
+  }
+
+  return false;
+};
+
+const checkHeaders = (
+  req: IRequestWithUserData,
+  res: Response,
+  next: NextFunction,
+  requiredAccess?: UserRole
+) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
@@ -13,11 +50,20 @@ const checkHeaders = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: "User unauthorized" });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET as string);
+    const jwtValue = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload;
 
-    next();
+    if (!userHasAccess(jwtValue.userData.role, requiredAccess)) {
+      return res.status(401).json({ message: "User unauthorized" });
+    }
+
+    req.userId = jwtValue.userData._id;
+
+    return next();
   } catch (error) {
-    res.status(401).json({ message: error });
+    return res.status(401).json({ message: error });
   }
 };
 

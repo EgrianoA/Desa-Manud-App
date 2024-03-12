@@ -1,0 +1,92 @@
+[
+  {
+    "taskNumber": "PMR-TVRI-21",
+    "taskId": "BPKT-001",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Tinggi",
+    "estimation": 7,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-22",
+    "taskId": "BPKT-003",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-23",
+    "taskId": "BPKT-005",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-24",
+    "taskId": "BPKT-007",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-25",
+    "taskId": "BPKT-009",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-26",
+    "taskId": "BPKT-010",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-27",
+    "taskId": "BPKT-011",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Menengah",
+    "estimation": 5,
+    "status": "Selesai"
+  },
+  {
+    "taskNumber": "PMR-TVRI-28",
+    "taskId": "BPKT-012",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Tinggi",
+    "estimation": 8,
+    "status": "Memerlukan Informasi Lebih Lanjut"
+  },
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "taskId": "BPKT-014",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Rendah",
+    "estimation": 3,
+    "status": "Dalam Pengerjaan"
+  },
+  {
+    "taskNumber": "PMR-TVRI-30",
+    "taskId": "BPKT-015",
+    "assignedTo": "BPK-021",
+    "assignedBy": "BPK-007",
+    "complexity": "Rendah",
+    "estimation": 2,
+    "status": "Akan Dikerjakan"
+  }
+]

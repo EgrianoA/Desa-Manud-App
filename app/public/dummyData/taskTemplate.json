@@ -1,0 +1,23 @@
+[
+  {
+    "templateId": "BPKTEMP-001",
+    "templateName": "PEMERIKSAAN DENGAN TUJUAN TERTENTU (PDTT) ATAS PENGELOLAAN BELANJA",
+    "taskList": [
+      "BPKT-001",
+      "BPKT-002",
+      "BPKT-003",
+      "BPKT-004",
+      "BPKT-005",
+      "BPKT-006",
+      "BPKT-007",
+      "BPKT-008",
+      "BPKT-009",
+      "BPKT-010",
+      "BPKT-011",
+      "BPKT-012",
+      "BPKT-013",
+      "BPKT-014",
+      "BPKT-015"
+    ]
+  }
+]

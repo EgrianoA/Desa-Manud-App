@@ -1,0 +1,47 @@
+[
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "activity": {
+      "kind": "comment",
+      "date": "19/11/2023 15:49",
+      "description": "Nanti tolong dipastikan kembali lampiran-lampirannya supaya lebih valid hasil pengecekannya",
+      "activityBy": "BPK-007"
+    }
+  },
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "activity": {
+      "kind": "taskUpdate",
+      "date": "18/11/2023 10:12",
+      "description": "Heru Budianto merubah status tugas",
+      "activityBy": "BPK-021"
+    }
+  },
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "activity": {
+      "kind": "taskUpdate",
+      "date": "18/11/2023 10:12",
+      "description": "Heru Budianto merubah estimasi pemeriksaan",
+      "activityBy": "BPK-021"
+    }
+  },
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "activity": {
+      "kind": "taskUpdate",
+      "date": "18/11/2023 10:11",
+      "description": "Heru Budianto merubah kompleksitas tugas",
+      "activityBy": "BPK-021"
+    }
+  },
+  {
+    "taskNumber": "PMR-TVRI-29",
+    "activity": {
+      "kind": "taskUpdate",
+      "date": "14/11/2023 13:51",
+      "description": "Agustina Widyasari menugaskan Heru Budianto",
+      "activityBy": "BPK-007"
+    }
+  }
+]

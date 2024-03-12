@@ -1,0 +1,14 @@
+[
+  {
+    "taskCategoryId": "TCBPK-001",
+    "categoryName": "Penganggaran dan Perencanaan Belanja"
+  },
+  {
+    "taskCategoryId": "TCBPK-002",
+    "categoryName": "Proses Pengadaan/Pemilihan Penyedia Barang dan Jasa"
+  },
+  {
+    "taskCategoryId": "TCBPK-003",
+    "categoryName": "Pelaksanaan, Pembayaran, dan Pertanggungjawaban Belanja"
+  }
+]

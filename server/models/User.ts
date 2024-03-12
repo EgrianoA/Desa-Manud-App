@@ -33,18 +33,8 @@ const UserSchema: Schema = new Schema(
       enum: Object.values(UserRole),
       required: true,
     },
-    createdDate: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedDate: {
-      type: Date,
-      default: Date.now,
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 export default mongoose.model<IUserDocument>("User", UserSchema);

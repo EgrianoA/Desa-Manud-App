@@ -33,6 +33,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     const loggedUserData: IUserData = pick(userData, [
+      "_id",
       "username",
       "email",
       "userFullName",
@@ -47,10 +48,10 @@ const login = async (req: Request, res: Response) => {
       }
     );
 
-    res.status(201).json({ data: { user: loggedUserData, token: token } });
+    return res.status(201).json({ data: { user: loggedUserData, token: token } });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: err });
+    return res.status(500).json({ message: err });
   }
 };
 

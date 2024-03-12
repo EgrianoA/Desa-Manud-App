@@ -1,0 +1,36 @@
+[
+  {
+    "teamId": "BPKT-001",
+    "teamName": "Tim Pemeriksaan TVRI",
+    "investigationLocation": "TVRI",
+    "teamLead": "BPK-007",
+    "subteamLead": "BPK-032",
+    "teamMember": ["BPK-021", "BPK-057", "BPK-018"],
+    "teamTask": [
+      "BPKT-001",
+      "BPKT-002",
+      "BPKT-003",
+      "BPKT-004",
+      "BPKT-005",
+      "BPKT-006",
+      "BPKT-007",
+      "BPKT-008",
+      "BPKT-009",
+      "BPKT-010",
+      "BPKT-011",
+      "BPKT-012",
+      "BPKT-013",
+      "BPKT-014",
+      "BPKT-015"
+    ]
+  },
+  {
+    "teamId": "BPKT-002",
+    "teamName": "Tim Pemeriksaan BSI",
+    "investigationLocation": "BSI",
+    "teamLead": "BPK-005",
+    "subteamLead": "",
+    "teamMember": ["BPK-015", "BPK-071"],
+    "teamTask": []
+  }
+]

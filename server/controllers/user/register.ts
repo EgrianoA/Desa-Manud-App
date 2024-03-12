@@ -49,6 +49,7 @@ const register = async (req: Request, res: Response) => {
 
     
     const returnValue: IUserData = pick(newUserRecord, [
+      "_id",
       "username",
       "email",
       "userFullName",

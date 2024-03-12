@@ -1,0 +1,21 @@
+{
+  "taskQuestionnaire": [
+    "Seberapa jelas dan terdefinisi dengan baik maksud dan tujuan tugas investigasi?",
+    "Seberapa efektif sumber daya (waktu, anggaran, peralatan, dll.) digunakan dalam tugas investigasi ini?",
+    "Bagaimana Anda menilai kualitas data yang dikumpulkan dan ketelitian analisisnya?",
+    "Sejauh mana hasil investigasi yang diharapkan tercapai?",
+    "Sejauh mana tugas investigasi memasukkan pendekatan inovatif dan kreatif dalam pemecahan masalah?",
+    "Seberapa efektifkah keterlibatan pemangku kepentingan utama selama proses investigasi?",
+    "Seberapa baik investigasi tersebut mematuhi standar kepatuhan dan etika yang relevan dengan tugasnya?"
+  ],
+  "individualQuestionnaire": [
+    "Seberapa baik individu tersebut memahami tujuan dan sasaran tugas investigasi?",
+    "Seberapa efektif individu tersebut memenuhi peran dan tanggung jawab spesifiknya dalam penyelidikan?",
+    "Seberapa mahir individu tersebut dalam memecahkan masalah dan mengatasi tantangan selama penyelidikan?",
+    "Seberapa signifikankah kontribusi individu terhadap dinamika dan kolaborasi tim?",
+    "Seberapa efektifkah individu dalam berkomunikasi dengan tim dan pemangku kepentingan lainnya?",
+    "Seberapa baik individu tersebut beradaptasi terhadap perubahan dan tantangan baru selama penyelidikan?",
+    "Seberapa efektif individu tersebut memanfaatkan keterampilan dan pengalamannya, dan seberapa besar pertumbuhannya secara profesional?",
+    "Apa dampak keseluruhan kinerja individu terhadap keberhasilan penyelidikan?"
+  ]
+}
