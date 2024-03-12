@@ -40,12 +40,14 @@ const Home: NextPage = () => {
          </Row>
          <div style={{ padding: '40px 15vw' }}>
             <Row style={sectionStyle}>
-               <Col>
+               <Col span={24}>
                   <Row style={{ marginBottom: '40px' }}>
-                     <Text h3>Informasi & Berita Desa</Text>
+                     <Text h3 style={{ display: 'flex', justifyContent: 'center' }}>Informasi & Berita Desa</Text>
                   </Row>
                   <Row>
-                     <ArticleCard articleData={articleData.slice(0, 5)} />
+                     <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <ArticleCard articleData={articleData.slice(0, 5)} />
+                     </div>
                   </Row>
                </Col>
             </Row>
