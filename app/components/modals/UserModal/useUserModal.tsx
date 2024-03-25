@@ -14,7 +14,7 @@ const UserModal = ({
     loggedUserRole?: string | null;
 }) => {
     const closeModal = useCallback(
-        (e) => {
+        (e: boolean) => {
             onClose(e);
         },
         [onClose]

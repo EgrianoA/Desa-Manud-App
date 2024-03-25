@@ -2,22 +2,17 @@
 FROM node:21
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json
-COPY package*.json ./
+RUN mkdir -p /usr/src/server
+WORKDIR /usr/src/server
 
 # Install dependencies
-COPY package*.json ./
+COPY package*.json /usr/src/server
 RUN npm install
 
 # Bundle app source inside Docker image
-COPY . .
-
-# Build the application
-RUN npm run build
+COPY . /usr/src/server
 
 # Your app binds to port 3001
 EXPOSE 3001
 
-CMD [ "node", "start" ]
+CMD [ "npm", "run", "dev" ]

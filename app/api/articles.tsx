@@ -14,9 +14,16 @@ export type IArticle = {
     creatorName: String;
     headerImage: HeaderImage[];
     createdAt: Date;
+    
 };
 
-export const useFetchArticles = ({ page = 1, pageSize = 10, query }: FetchUserParams) => {
+type FetchArticleParams = {
+    page?: number;
+    pageSize?: number;
+    query?: string;
+}
+
+export const useFetchArticles = ({ page = 1, pageSize = 10, query }: FetchArticleParams) => {
     const [response, setResponse] = useState({ errorResponse })
     const params = `page=${page}&size=${pageSize}${query ? `&query=${JSON.stringify(query)}` : ''}`
     try {
