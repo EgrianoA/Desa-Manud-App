@@ -1,4 +1,4 @@
-import { Input, Table } from "antd";
+import { Col, Input, Row, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   SearchOutlined,
@@ -22,6 +22,8 @@ import { useUserContext } from "../../utilities/authorization";
 type ArticleDataType = IArticle & {
   key: string;
 };
+
+const { Title } = Typography;
 
 const columns: ColumnsType<ArticleDataType> = [
   {
@@ -50,7 +52,11 @@ const AdminArticles: NextPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(10);
-  const { data: dataSource, loading, error } = useFetchArticles({ page, size });
+  const {
+    data: dataSource,
+    loading,
+    error,
+  } = useFetchArticles({ page, pageSize: size });
   const articleData = useMemo(() => {
     if (dataSource) {
       setTotal(dataSource.count);
@@ -69,37 +75,13 @@ const AdminArticles: NextPage = () => {
     []
   );
 
+  console.log(articleData);
+
   return (
     <>
-      <Breadcrumbs>
-        <Crumb>
-          <UserOutlined />
-          <CrumbLink>Artikel</CrumbLink>
-          <Text>/</Text>
-        </Crumb>
-        <Crumb>
-          <CrumbLink>Daftar Artikel</CrumbLink>
-        </Crumb>
-      </Breadcrumbs>
-
-      <Text h3>Daftar Artikel</Text>
-      <Flex
-        css={{ gap: "$8" }}
-        align={"center"}
-        justify={"between"}
-        wrap={"wrap"}
-      >
-        <Flex
-          css={{
-            gap: "$6",
-            flexWrap: "wrap",
-            "@sm": { flexWrap: "nowrap" },
-          }}
-          align={"center"}
-        >
-          <Input placeholder="Cari Akun" suffix={<SearchOutlined />} />
-        </Flex>
-        <Flex direction={"row"} css={{ gap: "$6" }} wrap={"wrap"}>
+      <Title level={3}>Daftar Artikel</Title>
+      <Row style={{ display: "flex", justifyContent: "end" }}>
+        <Col>
           <Button
             icon={<PlusCircleOutlined />}
             onClick={() => {
@@ -108,9 +90,8 @@ const AdminArticles: NextPage = () => {
           >
             Buat Artikel
           </Button>
-        </Flex>
-      </Flex>
-
+        </Col>
+      </Row>
       <Table
         columns={columns}
         dataSource={articleData}
@@ -129,6 +110,7 @@ const AdminArticles: NextPage = () => {
           onChange: onPaginationTableChange,
         }}
       />
+
       {articleModal.render()}
     </>
   );

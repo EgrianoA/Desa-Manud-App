@@ -35,8 +35,8 @@ const menuItems = [
 const PortalLayout = ({ children }: Props) => {
   const router = useRouter();
   const redirectMenu = useCallback(
-    (value: any) => {
-      router.push(value.key);
+    (path: string) => {
+      router.push(path);
     },
     [router]
   );
@@ -103,7 +103,7 @@ const PortalLayout = ({ children }: Props) => {
                 mode="horizontal"
                 items={menuItems}
                 style={{ height: 100, display: "flex", alignItems: "center" }}
-                onClick={redirectMenu}
+                onClick={({ key }) => redirectMenu(key)}
               />
             </Col>
           </Row>

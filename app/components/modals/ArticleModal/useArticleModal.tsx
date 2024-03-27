@@ -18,22 +18,20 @@ import {
   useUserContext,
   getAuthorization,
 } from "../../../utilities/authorization";
+import { UserRole } from "../../../api/users";
 
 const ArticleModal = ({
-  onClose,
+  closeModalAction,
   visible,
   articleData,
 }: {
-  onClose: ModalProps["onCancel"];
+  closeModalAction: (action: boolean) => void;
   visible: boolean;
   articleData?: IArticle | null;
 }) => {
-  const closeModal = useCallback(
-    (e: boolean) => {
-      onClose(e);
-    },
-    [onClose]
-  );
+  const closeModal = useCallback(() => {
+    closeModalAction(true);
+  }, [closeModalAction]);
 
   const { TextArea } = Input;
   const userContext = useUserContext();
@@ -51,7 +49,7 @@ const ArticleModal = ({
         });
 
         if (response?.status === 200) {
-          closeModal(true);
+          closeModal();
         }
       } else {
         const response: AxiosResponse<T> = await axios({
@@ -62,7 +60,7 @@ const ArticleModal = ({
         });
 
         if (response?.status === 200) {
-          closeModal(true);
+          closeModal();
         }
       }
     },
@@ -100,7 +98,7 @@ const ArticleModal = ({
               autoComplete="off"
               labelAlign="left"
               labelWrap
-              initialValues={articleData}
+              initialValues={articleData || undefined}
               onFinish={onFinish}
             >
               <Card
@@ -138,15 +136,17 @@ const ArticleModal = ({
 };
 const useArticleModal = () => {
   const [visible, setVisible] = useState(false);
-  const [articleData, setArticleData] = useState();
+  const [articleData, setArticleData] = useState<IArticle | null>(null);
+  const [loggedUserRole, setLoggedUserRole] = useState<UserRole | null>(null);
 
   const actions = useMemo(() => {
     const close = () => setVisible(false);
 
     return {
-      open: (articleData: IArticle | null) => {
+      open: (articleData: IArticle | null, role: UserRole | null) => {
         setArticleData(articleData);
         setVisible(true);
+        setLoggedUserRole(role);
       },
       close,
     };
@@ -157,7 +157,7 @@ const useArticleModal = () => {
     render: () => (
       <ArticleModal
         articleData={articleData}
-        onClose={actions.close}
+        closeModalAction={actions.close}
         visible={visible}
       />
     ),

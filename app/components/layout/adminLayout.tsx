@@ -1,48 +1,157 @@
-import React from 'react';
-import { useLockedBody } from '../hooks/useBodyLock';
-import { NavbarWrapper } from '../navbar/navbar';
-import { SidebarWrapper } from '../sidebar/sidebar';
-import { SidebarContext } from './layout-context';
-import { WrapperLayout } from './layout.styles';
-import { Flex } from '../styles/flex';
+import React, { useCallback, useMemo } from "react";
+import {
+  Layout,
+  Menu,
+  Image,
+  Row,
+  Col,
+  Avatar,
+  Dropdown,
+  MenuProps,
+  Typography,
+} from "antd";
+import {
+  HomeOutlined,
+  UserOutlined,
+  ContainerOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { useRouter } from "next/router";
+import styled from "styled-components";
+import {
+  initialUserContextData,
+  useUserContext,
+} from "../../utilities/authorization";
 
 interface Props {
-   children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const AdminLayout = ({ children }: Props) => {
-   const [sidebarOpen, setSidebarOpen] = React.useState(false);
-   const [_, setLocked] = useLockedBody(false);
-   const handleToggleSidebar = () => {
-      setSidebarOpen(!sidebarOpen);
-      setLocked(!sidebarOpen);
-   };
+const { Header, Content, Sider } = Layout;
+const { Text } = Typography;
 
-   return (
-      <SidebarContext.Provider
-         value={{
-            collapsed: sidebarOpen,
-            setCollapsed: handleToggleSidebar,
-         }}
-      >
-         <WrapperLayout>
-            <SidebarWrapper />
-            <NavbarWrapper>
-               <Flex
-                  css={{
-                     'mt': '$5',
-                     'px': '$6',
-                     '@sm': { mt: '$10', px: '$16', },
-                  }}
-                  justify={'center'}
-                  direction={'column'}
-               >
-                  {children}
-               </Flex>
-            </NavbarWrapper>
-         </WrapperLayout>
-      </SidebarContext.Provider>
-   );
+const StyledMenu = styled(Menu)`
+  &.ant-menu {
+    padding-top: 40px;
+    min-height: 100vh;
+  }
+`;
+
+const DropdownContentContainer = styled(Row)`
+  &.ant-dropdown-trigger:hover {
+    cursor: pointer;
+  }
+`;
+
+const menuItems = [
+  { key: "/admin", icon: <HomeOutlined />, label: "Beranda" },
+  { key: "/admin/users", icon: <UserOutlined />, label: "Daftar Pengguna" },
+  {
+    key: "/admin/articles",
+    icon: <ContainerOutlined />,
+    label: "Daftar Artikel",
+  },
+];
+
+const dropdownItems = [
+  {
+    key: "logout",
+    label: "Keluar",
+    icon: <LogoutOutlined />,
+  },
+];
+
+const AdminLayout = ({ children }: Props) => {
+  const router = useRouter();
+  const userContext = useUserContext();
+  const currentPath = useMemo(() => router.pathname, [router.pathname]);
+
+  const redirectToMenu = useCallback(
+    (path: string) => {
+      router.push(path);
+    },
+    [router]
+  );
+
+  const onDrawerClick: MenuProps["onClick"] = useCallback(
+    ({ key }: { key: string }) => {
+      if (key === "logout") {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          userContext.setUserContext(initialUserContextData);
+        }
+        router.push("/admin/login");
+      }
+    },
+    [router, userContext]
+  );
+
+  return (
+    <Layout>
+      <Header>
+        <Row
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            alignItems: "center",
+          }}
+        >
+          <Dropdown menu={{ items: dropdownItems, onClick: onDrawerClick }}>
+            <DropdownContentContainer>
+              <Col style={{ marginRight: "20px" }}>
+                <Text style={{ color: "white", fontSize: "20px" }}>
+                  {userContext.userFullName}
+                </Text>
+              </Col>
+              <Col>
+                <Avatar
+                  size={36}
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
+                />
+              </Col>
+            </DropdownContentContainer>
+          </Dropdown>
+        </Row>
+      </Header>
+      <Layout>
+        <Sider width={200}>
+          <Row
+            style={{
+              backgroundColor: "white",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              src="/Desa manud logo.png"
+              width="150px"
+              height="150px"
+              alt="logo"
+            />
+          </Row>
+          <StyledMenu
+            mode="inline"
+            selectedKeys={[currentPath]}
+            items={menuItems}
+            onClick={({ key }) => redirectToMenu(key)}
+            className="sider-menu"
+          />
+        </Sider>
+        <Layout style={{ padding: "0 24px 24px" }}>
+          <Content
+            style={{
+              padding: "64px 24px 24px 24px",
+              margin: 0,
+              minHeight: "100vh",
+            }}
+          >
+            {children}
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
+  );
 };
 
-export default AdminLayout
+export default AdminLayout;

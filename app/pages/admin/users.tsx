@@ -1,22 +1,8 @@
-import { Input, Table, Tag } from "antd";
+import { Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import {
-  SearchOutlined,
-  UserOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
 import type { NextPage } from "next";
-import { Button, Text } from "@nextui-org/react";
-import { UsersIcon } from "../../components/icons/breadcrumb/users-icon";
-import { Flex } from "../../components/styles/flex";
-import Link from "next/link";
 import React, { useMemo, useState, useCallback } from "react";
 import useUserModal from "../../components/modals/UserModal/useUserModal";
-import {
-  Breadcrumbs,
-  Crumb,
-  CrumbLink,
-} from "../../components/breadcrumb/breadcrumb.styled";
 import {
   generateRoleTagColor,
   generateRoleName,
@@ -27,6 +13,8 @@ import { useUserContext } from "../../utilities/authorization";
 type UserDataType = IUser & {
   key: string;
 };
+
+const { Title } = Typography;
 
 const columns: ColumnsType<UserDataType> = [
   {
@@ -58,7 +46,11 @@ const AdminUsers: NextPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(10);
-  const { data: dataSource, loading, error } = useFetchUsers({ page, size });
+  const {
+    data: dataSource,
+    loading,
+    error,
+  } = useFetchUsers({ page, pageSize: size });
   const userData = useMemo(() => {
     if (dataSource) {
       setTotal(dataSource.count);
@@ -80,35 +72,7 @@ const AdminUsers: NextPage = () => {
 
   return (
     <>
-      <Breadcrumbs>
-        <Crumb>
-          <UserOutlined />
-          <CrumbLink>Pengguna</CrumbLink>
-          <Text>/</Text>
-        </Crumb>
-        <Crumb>
-          <CrumbLink>Daftar Pengguna</CrumbLink>
-        </Crumb>
-      </Breadcrumbs>
-
-      <Text h3>Daftar Pengguna</Text>
-      <Flex
-        css={{ gap: "$8" }}
-        align={"center"}
-        justify={"between"}
-        wrap={"wrap"}
-      >
-        <Flex
-          css={{
-            gap: "$6",
-            flexWrap: "wrap",
-            "@sm": { flexWrap: "nowrap" },
-          }}
-          align={"center"}
-        >
-          <Input placeholder="Cari Akun" suffix={<SearchOutlined />} />
-        </Flex>
-      </Flex>
+      <Title level={3}>Daftar Pengguna</Title>
 
       <Table
         columns={columns}
