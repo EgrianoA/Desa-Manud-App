@@ -37,7 +37,7 @@ const StyledMenu = styled(Menu)`
   }
 `;
 
-const DropdownContentContainer = styled(Row)`
+export const DropdownContentContainer = styled(Row)`
   &.ant-dropdown-trigger:hover {
     cursor: pointer;
   }
@@ -80,7 +80,7 @@ const AdminLayout = ({ children }: Props) => {
           localStorage.removeItem("token");
           userContext.setUserContext(initialUserContextData);
         }
-        router.push("/admin/login");
+        router.replace("/admin/login");
       }
     },
     [router, userContext]

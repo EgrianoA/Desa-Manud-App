@@ -27,7 +27,7 @@ export const initialUserContextData = {
 }
 
 export const UserContext = createContext<IUserContextData>(initialUserContextData);
-type IUserContextData = {
+export type IUserContextData = {
   token?: string;
   expireAt?: number;
   email?: string;

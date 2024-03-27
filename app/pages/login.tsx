@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import axios, { AxiosResponse } from "axios";
-import { Form, Input, Button, Space, Typography } from "antd";
+import { Form, Input, Button, Space, Typography, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import { useUserContext, getAuthorization } from "../utilities/authorization";
@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 const Login: NextPage = () => {
   const { Title } = Typography;
   const [isLogin, setIsLogin] = useState(true);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const userContext = useUserContext();
   const router = useRouter();
@@ -44,11 +45,17 @@ const Login: NextPage = () => {
                 ...decodedJWT.userData,
               })
             );
-
+            messageApi.open({
+              type: "success",
+              content: "Berhasil Masuk",
+            });
             router.push("/");
           }
-        } catch (e) {
-          console.error(e);
+        } catch (e: any) {
+          messageApi.open({
+            type: "error",
+            content: e.message,
+          });
         }
       } else {
         try {
@@ -56,10 +63,7 @@ const Login: NextPage = () => {
             method: "post",
             url: process.env.BE_BASEURL + "/api/users/register",
             data: {
-              username: values.username,
-              email: values.password,
-              password: values.password,
-              userFullName: values.userFullName,
+              ...values,
               role: "publicUser",
             },
           });
@@ -80,25 +84,33 @@ const Login: NextPage = () => {
                 ...decodedJWT.userData,
               })
             );
-
+            messageApi.open({
+              type: "success",
+              content: "Akun berhasil terbuat",
+            });
             router.push("/");
           }
-        } catch (e) {
-          console.error(e);
+        } catch (e: any) {
+          messageApi.open({
+            type: "error",
+            content: e.message,
+          });
         }
       }
     },
-    [isLogin, router, userContext]
+    [isLogin, messageApi, router, userContext]
   );
 
   return (
     <Space direction="vertical">
+      {contextHolder}
       <center>
         <Image
           src="/Desa manud logo.png"
           width="180px"
           height="180px"
           style={{ display: "flex" }}
+          alt="logo"
         />
         {isLogin && (
           <>
@@ -149,7 +161,7 @@ const Login: NextPage = () => {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginBottom: "10px" }}
                 >
                   Masuk
                 </Button>
@@ -192,6 +204,11 @@ const Login: NextPage = () => {
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Username"
+                  onKeyPress={(event) => {
+                    if (!/[a-zA-z0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </Form.Item>
               <Form.Item
@@ -239,6 +256,35 @@ const Login: NextPage = () => {
                 <Input
                   prefix={<UserOutlined className="site-form-item-icon" />}
                   placeholder="Nama Lengkap"
+                  onKeyPress={(event) => {
+                    if (!/[a-zA-z ]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="userNIK"
+                rules={[
+                  {
+                    type: "string",
+                    min: 16,
+                    message: "Silahkan masukkan NIK anda dengan sesuai",
+                  },
+                  {
+                    required: true,
+                    message: "Silahkan masukkan NIK anda",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  placeholder="NIK"
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </Form.Item>
               <Form.Item>
@@ -246,7 +292,7 @@ const Login: NextPage = () => {
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginBottom: "10px" }}
                 >
                   Daftar
                 </Button>

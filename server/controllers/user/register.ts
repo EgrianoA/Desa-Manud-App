@@ -7,19 +7,24 @@ import { isEmpty, pick } from "lodash";
 type UserRegisterType = Pick<
   IUser,
   "email" | "password" | "role" | "userFullName" | "username"
->;
+> & {
+  nik?: string;
+};
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { username, email, userFullName, password, role }: UserRegisterType =
-      req.body;
-
+    const { username, email, userFullName, password, role }: IUser = req.body;
+    console.log(req.body);
     if (
       isEmpty(username) ||
       isEmpty(email) ||
       isEmpty(userFullName) ||
       isEmpty(password)
     ) {
+      return res.status(400).json({ message: "Mandatory fields required" });
+    }
+
+    if (role === UserRole.PublicUser && isEmpty(req.body.userNIK)) {
       return res.status(400).json({ message: "Mandatory fields required" });
     }
 
@@ -33,8 +38,19 @@ const register = async (req: Request, res: Response) => {
     const isFoundUsername = await User.findOne({
       username: { $regex: new RegExp(req.body.username, "i") },
     });
+
     if (isFoundUsername) {
       return res.status(400).json({ message: "Username already exists" });
+    }
+
+    if (role === UserRole.PublicUser) {
+      const isFoundNik = await User.findOne({
+        nik: req.body.userNIK,
+      });
+
+      if (isFoundNik) {
+        return res.status(400).json({ message: "NIK already exists" });
+      }
     }
 
     const newUserData: UserRegisterType = {
@@ -43,11 +59,11 @@ const register = async (req: Request, res: Response) => {
       userFullName,
       password: bcrypt.hashSync(password, 12),
       role: isEmpty(role) ? UserRole.PublicUser : role,
+      nik: role === UserRole.PublicUser ? req.body.userNIK : null,
     };
 
     const newUserRecord = await User.create(newUserData);
 
-    
     const returnValue: IUserData = pick(newUserRecord, [
       "_id",
       "username",
@@ -63,7 +79,6 @@ const register = async (req: Request, res: Response) => {
         expiresIn: "1h",
       }
     );
-
 
     res.status(201).json({ data: { user: returnValue, token: token } });
   } catch (err) {

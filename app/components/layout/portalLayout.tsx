@@ -1,11 +1,35 @@
 import React, { useCallback } from "react";
-import { Layout, Row, Col, Menu } from "antd";
+import {
+  Layout,
+  Row,
+  Col,
+  Menu,
+  Dropdown,
+  Typography,
+  MenuProps,
+  Avatar,
+  Button,
+} from "antd";
 import styled from "styled-components";
 import Image from "next/image";
-import { PhoneOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import {
+  PhoneOutlined,
+  ClockCircleOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  LoginOutlined,
+} from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { DropdownContentContainer } from "./adminLayout";
+import {
+  IUserContextData,
+  initialUserContextData,
+  useUserContext,
+} from "../../utilities/authorization";
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
+
+const { Text } = Typography;
 
 interface Props {
   children: React.ReactNode;
@@ -32,14 +56,88 @@ const menuItems = [
   },
 ];
 
+const dropdownItems = [
+  {
+    key: "logout",
+    label: "Keluar",
+    icon: <LogoutOutlined />,
+  },
+];
+
+const UserColumn = ({
+  userContext,
+  onDrawerClick,
+  onLoginClick,
+}: {
+  userContext: IUserContextData | null;
+  onDrawerClick: MenuProps["onClick"];
+  onLoginClick: () => void;
+}) => {
+  if (!userContext?.token) {
+    return (
+      <Button
+        style={{
+          marginRight: "20px",
+          height: "40px",
+        }}
+        onClick={onLoginClick}
+      >
+        <Text style={{ color: "black", fontSize: "20px" }}>
+          <LoginOutlined style={{ marginRight: "10px" }} />
+          Masuk
+        </Text>
+      </Button>
+    );
+  }
+
+  return (
+    <Dropdown menu={{ items: dropdownItems, onClick: onDrawerClick }}>
+      <DropdownContentContainer>
+        <Col style={{ marginRight: "20px" }}>
+          <Text style={{ color: "black", fontSize: "20px" }}>
+            {userContext.userFullName}
+          </Text>
+        </Col>
+        <Col>
+          <Avatar
+            size={36}
+            icon={<UserOutlined />}
+            style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
+          />
+        </Col>
+      </DropdownContentContainer>
+    </Dropdown>
+  );
+};
+
 const PortalLayout = ({ children }: Props) => {
   const router = useRouter();
+  const userContext = useUserContext();
+
   const redirectMenu = useCallback(
     (path: string) => {
       router.push(path);
     },
     [router]
   );
+
+  const onLoginClick = useCallback(() => {
+    router.push("/login");
+  }, [router]);
+
+  const onDrawerClick: MenuProps["onClick"] = useCallback(
+    ({ key }: { key: string }) => {
+      if (key === "logout") {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          userContext.setUserContext(initialUserContextData);
+        }
+        router.replace("/");
+      }
+    },
+    [router, userContext]
+  );
+
   return (
     <Layout>
       <Header
@@ -86,6 +184,7 @@ const PortalLayout = ({ children }: Props) => {
               paddingRight: "15vw",
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
               height: 100,
             }}
           >
@@ -97,13 +196,20 @@ const PortalLayout = ({ children }: Props) => {
                 alt="Desa manud logo"
               />
             </Col>
-            <Col span={22}>
+            <Col span={18}>
               <StyledMenu
                 theme="light"
                 mode="horizontal"
                 items={menuItems}
                 style={{ height: 100, display: "flex", alignItems: "center" }}
                 onClick={({ key }) => redirectMenu(key)}
+              />
+            </Col>
+            <Col span={4}>
+              <UserColumn
+                userContext={userContext}
+                onDrawerClick={onDrawerClick}
+                onLoginClick={onLoginClick}
               />
             </Col>
           </Row>
@@ -120,7 +226,7 @@ const PortalLayout = ({ children }: Props) => {
       >
         <Row>
           <Col span={6}>Alamat</Col>
-          <Col span={6}>Social Media</Col>
+          <Col span={6}>Media Sosial</Col>
           <Col span={6}></Col>
           <Col span={6}></Col>
         </Row>

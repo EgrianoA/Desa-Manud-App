@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       currentRouter.startsWith("/admin") &&
       !currentRouter.includes("login")
     ) {
-      router.push("/admin/login");
+      router.replace("/admin/login");
     }
     if (
       token &&
@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     ) {
       const tokenData = JSON.parse(token);
       if (tokenData.role !== "superAdmin" && tokenData.role !== "admin") {
-        router.push("/");
+        router.replace("/");
       }
     }
   }, [currentRouter, router]);
