@@ -56,7 +56,12 @@ const menuItems = [
   },
   {
     label: "Informasi",
-    key: "/artikel",
+    key: "artikel",
+    children: [
+      { label: "Informasi & Berita Desa", key: "/artikel" },
+      { label: "Informasi Program Kesehatan", key: "/program-kesehatan" },
+      { label: "Informasi Program Kebersihan", key: "/program-kebersihan" },
+    ],
   },
 ];
 

@@ -8,6 +8,13 @@ export type HeaderImage = UploadedFile & {
   alt: string;
 };
 
+export enum ArticleKind {
+  Umum = "umum",
+  Kebersihan = "kebersihan",
+  Kesehatan = "kesehatan",
+  ProgramKerja = "programKerja",
+}
+
 export type IArticle = {
   _id: string;
   title: string;
@@ -22,7 +29,7 @@ export type IArticle = {
 type FetchArticleParams = {
   page?: number;
   pageSize?: number;
-  query?: string;
+  query?: any;
 };
 
 export const useFetchArticles = ({

@@ -7,6 +7,13 @@ type HeaderImage = UploadedFile & {
   alt: string;
 };
 
+enum ArticleKind {
+  Umum = "umum",
+  Kebersihan = "kebersihan",
+  Kesehatan = "kesehatan",
+  ProgramKerja = "programKerja",
+}
+
 export type IArticle = {
   title: string;
   content: string;
@@ -18,6 +25,12 @@ export type IArticleDocument = Document & IArticle;
 
 const ArticleSchema: Schema = new Schema(
   {
+    type: {
+      type: String,
+      default: ArticleKind.Umum,
+      enum: Object.values(ArticleKind),
+      required: true,
+    },
     title: { type: String, required: true },
     content: { type: String, required: true },
     creator: { type: Schema.Types.ObjectId, required: true, ref: "User" },

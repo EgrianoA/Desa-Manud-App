@@ -1,14 +1,25 @@
 import { Request, Response } from "express";
 import Article, { IArticleDocument } from "../../models/Article";
 
+const filterQuery = (query: string) => {
+  const parsedQuery: any = JSON.parse(query);
+  const filterQuery: any = {};
+
+  if (parsedQuery.types) {
+    filterQuery.type = { $in: parsedQuery.types };
+  }
+
+  return filterQuery;
+};
+
 const getArticle = async (req: Request, res: Response) => {
   try {
     const { page: pageParam, size: sizeParam, query } = req.query;
     const page = (pageParam as unknown as number) || 1;
     const size = (sizeParam as unknown as number) || 10;
-    const filterQuery = {};
+    const filter = query ? filterQuery(query as string) : {};
 
-    const article = (await Article.find(filterQuery)
+    const article = (await Article.find(filter)
       .populate({ path: "creator" })
       .sort([["createdAt", -1]])
       .limit(size)
@@ -25,7 +36,7 @@ const getArticle = async (req: Request, res: Response) => {
       };
     });
 
-    const count = await Article.countDocuments(filterQuery);
+    const count = await Article.countDocuments(filter);
     return res
       .status(200)
       .json({ count: count || 0, data: articleWithSlugname });

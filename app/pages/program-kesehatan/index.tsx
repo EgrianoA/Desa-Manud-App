@@ -33,7 +33,7 @@ const Article: NextPage = () => {
   } = useFetchArticles({
     page,
     pageSize: size,
-    query: { types: [ArticleKind.Umum] },
+    query: { types: [ArticleKind.Kesehatan] },
   });
   useEffect(() => {
     if (dataSource) {
@@ -53,7 +53,7 @@ const Article: NextPage = () => {
     <ArticleListContainer>
       <Col>
         <Row style={{ marginBottom: "40px" }}>
-          <Text h3>Daftar Informasi & Berita desa</Text>
+          <Text h3>Daftar Informasi Program Kesehatan</Text>
         </Row>
         <Row>
           <ArticleScollPagination
@@ -61,7 +61,7 @@ const Article: NextPage = () => {
             articleData={articleData}
             page={page}
             total={total}
-            articleRouter="artikel"
+            articleRouter="program-kesehatan"
           />
         </Row>
       </Col>
