@@ -16,6 +16,8 @@ import {
   ContainerOutlined,
   LogoutOutlined,
   BookOutlined,
+  SnippetsOutlined,
+  FileDoneOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -56,6 +58,11 @@ const menuItems = [
     key: "/admin/reports",
     icon: <BookOutlined />,
     label: "Laporan Warga",
+  },
+  {
+    key: "/admin/programs",
+    icon: <SnippetsOutlined />,
+    label: "Program",
   },
 ];
 

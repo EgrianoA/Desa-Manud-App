@@ -3,10 +3,12 @@ import {
   Col,
   Card,
   Modal,
+  ModalProps,
   Form,
   Input,
   Space,
   Button,
+  Select,
   UploadFile,
   UploadProps,
   Upload,
@@ -21,43 +23,24 @@ import {
   getAuthorization,
 } from "../../../utilities/authorization";
 import getFileUrl from "../../../utilities/getFileUrl";
-import sendFileToServer from "../../../api/sendFileToServer";
 
-const uploadHeaderImage = async (
-  fileList: UploadFile[],
-  articleId: string,
-  token: string
-) => {
-  const form = new FormData();
-  await Promise.all(
-    fileList.map(async (file) => {
-      if (file.url) {
-        const fileBlob = await axios.get(file.url, { responseType: "blob" });
-        form.append(
-          "headerImages",
-          new File([fileBlob.data], file.name) as Blob
-        );
-      } else if (file.originFileObj) {
-        form.append("headerImages", file.originFileObj as Blob);
-      }
-    })
-  );
+const programKindOptions = [
+  { label: "Kebersihan", value: ArticleKind.Kebersihan },
+  { label: "Kesehatan", value: ArticleKind.Kesehatan },
+];
 
-  sendFileToServer(form, `/api/articles/uploadHeaderImage/${articleId}`, token);
-};
-
-const ArticleModal = ({
+const ProgramModal = ({
   closeModalAction,
   visible,
-  articleData,
+  programData,
 }: {
   closeModalAction: (action: boolean) => void;
   visible: boolean;
-  articleData?: IArticle | null;
+  programData?: IArticle | null;
 }) => {
   const { TextArea } = Input;
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const userContext = useUserContext();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const router = useRouter();
 
   const closeModal = useCallback(() => {
@@ -65,8 +48,8 @@ const ArticleModal = ({
   }, [closeModalAction]);
 
   useEffect(() => {
-    if (articleData?.headerImage.length) {
-      const initialFileList = articleData.headerImage.map((image) => {
+    if (programData?.headerImage.length) {
+      const initialFileList = programData.headerImage.map((image) => {
         return {
           uid: image._id,
           name: image.filename,
@@ -77,7 +60,7 @@ const ArticleModal = ({
     } else {
       setFileList([]);
     }
-  }, [articleData?.headerImage]);
+  }, [programData?.headerImage]);
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
@@ -86,11 +69,12 @@ const ArticleModal = ({
     async (values: any) => {
       //if no article data -> create new. Else update
       const { headerImage, ...contentData } = values;
-      if (!articleData?._id) {
+
+      if (!programData?._id) {
         const response: AxiosResponse<T> = await axios({
           method: "post",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: { ...contentData, type: ArticleKind.Umum },
+          data: contentData,
           ...getAuthorization(userContext?.token || ""),
         }).catch((e) => {
           return e.response;
@@ -108,7 +92,7 @@ const ArticleModal = ({
         const response: AxiosResponse<T> = await axios({
           method: "patch",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: { id: articleData._id, ...contentData, type: ArticleKind.Umum },
+          data: { id: programData._id, ...contentData },
           ...getAuthorization(userContext?.token || ""),
         }).catch((e) => {
           return e.response;
@@ -124,7 +108,7 @@ const ArticleModal = ({
         }
       }
     },
-    [articleData?._id, fileList, router, userContext?.token]
+    [programData?._id, userContext?.token, fileList, router]
   );
 
   const onDelete = useCallback((id: string) => {
@@ -158,27 +142,30 @@ const ArticleModal = ({
               autoComplete="off"
               labelAlign="left"
               labelWrap
-              initialValues={articleData || undefined}
+              initialValues={programData || undefined}
               onFinish={onFinish}
             >
               <Card
-                title="Detail Pengguna"
+                title="Detail Program"
                 extra={
-                  articleData?._id && (
+                  programData?._id && (
                     <Button
                       type="primary"
                       danger
-                      onClick={() => onDelete(articleData?._id)}
+                      onClick={() => onDelete(programData?._id)}
                     >
                       Hapus
                     </Button>
                   )
                 }
               >
-                <Form.Item label="Judul Artikel" name="title">
+                <Form.Item label="Judul Program" name="title">
                   <Input placeholder="" />
                 </Form.Item>
-                <Form.Item label="Isi Artikel" name="content">
+                <Form.Item label="Tipe Program" name="type">
+                  <Select options={programKindOptions} />
+                </Form.Item>
+                <Form.Item label="Keterangan" name="content">
                   <TextArea placeholder="" rows={10} />
                 </Form.Item>
                 <Form.Item label="Gambar Artikel" name="headerImage">
@@ -212,16 +199,16 @@ const ArticleModal = ({
     </Modal>
   );
 };
-const useArticleModal = () => {
+const useProgramModal = () => {
   const [visible, setVisible] = useState(false);
-  const [articleData, setArticleData] = useState<IArticle | null>(null);
+  const [programData, setProgramData] = useState<IArticle | null>();
 
   const actions = useMemo(() => {
     const close = () => setVisible(false);
 
     return {
-      open: (articleData: IArticle | null) => {
-        setArticleData(articleData);
+      open: (programData: IArticle | null) => {
+        setProgramData(programData);
         setVisible(true);
       },
       close,
@@ -231,8 +218,8 @@ const useArticleModal = () => {
   return {
     ...actions,
     render: () => (
-      <ArticleModal
-        articleData={articleData}
+      <ProgramModal
+        programData={programData}
         closeModalAction={actions.close}
         visible={visible}
       />
@@ -240,4 +227,7 @@ const useArticleModal = () => {
   };
 };
 
-export default useArticleModal;
+export default useProgramModal;
+function uploadHeaderImage(fileList: any, _id: any, arg2: string) {
+  throw new Error("Function not implemented.");
+}

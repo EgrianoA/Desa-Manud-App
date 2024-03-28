@@ -1,11 +1,10 @@
 import { Text } from "@nextui-org/react";
 import { NextPage } from "next/types";
 import { Row, Col, Button } from "antd";
-import styled from "styled-components";
 import Carousel from "../components/portalPage/Carousel";
 import ArticleCard from "../components/portalPage/ArticleCard";
 import React, { useMemo, useState, useCallback } from "react";
-import { IArticle, useFetchArticles } from "../api/articles";
+import { ArticleKind, IArticle, useFetchArticles } from "../api/articles";
 import getFileUrl from "../utilities/getFileUrl";
 
 const sectionStyle = {
@@ -19,7 +18,11 @@ const Home: NextPage = () => {
     data: dataSource,
     loading,
     error,
-  } = useFetchArticles({ page, pageSize: size });
+  } = useFetchArticles({
+    page,
+    pageSize: size,
+    query: { types: [ArticleKind.Umum] },
+  });
   const articleSourceData = useMemo(() => {
     if (dataSource) {
       return dataSource.data || [];
@@ -58,16 +61,13 @@ const Home: NextPage = () => {
             >
               <Text h3>Informasi & Berita Desa</Text>
             </Row>
-            <Row>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                }}
-              >
-                <ArticleCard articleData={articleData.slice(0, 5)} />
-              </div>
+            <Row
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <ArticleCard articleData={articleData.slice(0, 5)} />
             </Row>
           </Col>
         </Row>
