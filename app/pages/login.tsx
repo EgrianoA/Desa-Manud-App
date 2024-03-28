@@ -27,6 +27,8 @@ const Login: NextPage = () => {
               usernameOrEmail: values.username,
               password: values.password,
             },
+          }).catch((e) => {
+            return e.response;
           });
 
           if (response?.status === 201 && response.data.data) {
@@ -66,6 +68,8 @@ const Login: NextPage = () => {
               ...values,
               role: "publicUser",
             },
+          }).catch((e) => {
+            return e.response;
           });
 
           if (response?.status === 201 && response.data.data) {

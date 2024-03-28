@@ -8,16 +8,45 @@ import {
   Button,
   Select,
   Upload,
+  message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import React, { useCallback, useMemo, useState } from "react";
 import type { GetProp, UploadFile, UploadProps } from "antd";
+import sendFileToServer from "../../../api/sendFileToServer";
+import {
+  getAuthorization,
+  useUserContext,
+} from "../../../utilities/authorization";
+
+const uploadAttachment = async (
+  fileList: UploadFile[],
+  reportId: string,
+  token: string
+) => {
+  const form = new FormData();
+  await Promise.all(
+    fileList.map(async (file) => {
+      if (file.originFileObj) {
+        form.append("reportAttachment", file.originFileObj as Blob);
+      }
+    })
+  );
+
+  sendFileToServer(
+    form,
+    `/api/articles/uploadReportAttachment/${reportId}`,
+    token
+  );
+};
 
 const NewReport = () => {
   const { TextArea } = Input;
+  const [messageApi, contextHolder] = message.useMessage();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const userContext = useUserContext();
   const router = useRouter();
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
@@ -25,23 +54,29 @@ const NewReport = () => {
 
   const onFinish = useCallback(
     async (values: any) => {
-      console.log(values);
-      console.log(fileList);
-      const formData = new FormData();
-      fileList.forEach((file) => {
-        formData.append("attachment", file.originFileObj);
+      const { attachment: reportAttachment, ...reportData } = values;
+      const response: AxiosResponse<T> = await axios({
+        method: "post",
+        url: process.env.BE_BASEURL + "/api/reports",
+        data: reportData,
+        ...getAuthorization(userContext?.token || ""),
+      }).catch((e) => {
+        messageApi.error("Maaf, sedang terjadi gangguan");
+        return e.response;
       });
 
-      formData.append("type", values.type);
-      formData.append("content", values.content);
-      console.log(formData);
-      //   router.push({ pathname: `/aduan` }, `/aduan/`, { shallow: true });
+      if (response?.status === 200) {
+        uploadAttachment(fileList, response.data._id, userContext?.token || "");
+        messageApi.success("Terima kasih, laporan anda telah kami terima");
+        router.reload();
+      }
     },
-    [fileList]
+    [fileList, messageApi, router, userContext?.token]
   );
 
   return (
     <Space direction="vertical" style={{ display: "flex" }}>
+      {contextHolder}
       <Row>
         <Col
           span={24}
@@ -75,7 +110,7 @@ const NewReport = () => {
                   ]}
                 />
               </Form.Item>
-              <Form.Item label="Detail Laporan" name="content">
+              <Form.Item label="Detail Laporan" name="description">
                 <TextArea placeholder="Silahkan sampaikan " />
               </Form.Item>
               <Form.Item label="Lampiran Laporan" name="attachment">

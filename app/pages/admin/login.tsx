@@ -24,6 +24,8 @@ const AdminLogin: NextPage = () => {
           url: process.env.BE_BASEURL + "/api/users/login",
           data: { usernameOrEmail: values.username, password: values.password },
           ...getAuthorization(userContext?.token || ""),
+        }).catch((e) => {
+          return e.response;
         });
 
         if (response?.status === 201 && response.data.data) {
