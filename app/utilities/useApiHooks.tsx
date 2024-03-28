@@ -30,6 +30,8 @@ const useApiHooks = ({ method, url, body }: ApiHooksType) => {
             url,
             data: body,
             ...getAuthorization(userContext?.token || ""),
+          }).catch((e) => {
+            return e.response;
           });
           setData(response.data);
           setLoading(false);

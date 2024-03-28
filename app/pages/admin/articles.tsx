@@ -1,23 +1,12 @@
-import { Col, Input, Row, Table, Typography } from "antd";
+import { Col, Row, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import {
-  SearchOutlined,
-  UserOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import type { NextPage } from "next";
-import { Button, Text } from "@nextui-org/react";
-import { Flex } from "../../components/styles/flex";
+import { Button } from "@nextui-org/react";
 import React, { useMemo, useState, useCallback } from "react";
 import useArticleModal from "../../components/modals/ArticleModal/useArticleModal";
-import {
-  Breadcrumbs,
-  Crumb,
-  CrumbLink,
-} from "../../components/breadcrumb/breadcrumb.styled";
 import { IArticle, useFetchArticles } from "../../api/articles";
 import dayjs from "dayjs";
-import { useUserContext } from "../../utilities/authorization";
 
 type ArticleDataType = IArticle & {
   key: string;
@@ -66,7 +55,6 @@ const AdminArticles: NextPage = () => {
     return [];
   }, [dataSource]);
 
-  const userContext = useUserContext();
   const onPaginationTableChange = useCallback(
     (page: number, pageSize: number) => {
       setPage(page);

@@ -2,18 +2,20 @@ import {
   Row,
   Col,
   Card,
-  Modal,
-  ModalProps,
   Form,
   Input,
   Space,
   Button,
-  Select,
   Alert,
 } from "antd";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
+import {
+  getAuthorization,
+  useUserContext,
+} from "../../../utilities/authorization";
+import { StatusType } from "../../../api/reports";
 
 type ReportStatusResultType = {
   status: string | undefined;
@@ -27,25 +29,114 @@ const initialStatus: ReportStatusResultType = {
   description: undefined,
 };
 
+const generateReportDescription = (type?: StatusType, notes?: string) => {
+  switch (type) {
+    case StatusType.New:
+    case StatusType.OnCheck:
+      return `Laporan anda saat ini sedang dalam proses pengecekan${
+        notes ? `\n\nKeterangan: ${notes}` : ""
+      }`;
+
+    case StatusType.Cancelled:
+    case StatusType.Rejected:
+      return `Mohon maaf, laporan anda tidak dapat kami lakukan proses pengecekan lebih lanjut${
+        notes ? `\n\nKeterangan: ${notes}` : ""
+      }`;
+
+    case StatusType.Done:
+      return `Laporan anda telah selesai kami lakukan proses tindak lanjut${
+        notes ? `\n\nKeterangan: ${notes}` : ""
+      }`;
+
+    default:
+      return "Tidak ada laporan dengan nomor aduan tersebut";
+  }
+};
+
+const generateReportStatus = (type?: StatusType) => {
+  switch (type) {
+    case StatusType.New:
+    case StatusType.OnCheck:
+      return "found";
+
+    case StatusType.Cancelled:
+    case StatusType.Rejected:
+      return "cancelled";
+
+    case StatusType.Done:
+      return "done";
+
+    default:
+      return "not-found";
+  }
+};
+
+const AlertResponse = ({
+  status,
+  message,
+  description,
+}: {
+  status: string | undefined;
+  message: string | undefined;
+  description: string | undefined;
+}) => {
+  let type: "info" | "warning" | "success" | "error" | undefined;
+  switch (status) {
+    case "found":
+      type = "info";
+      break;
+
+    case "cancelled":
+      type = "warning";
+      break;
+
+    case "done":
+      type = "success";
+      break;
+
+    default:
+      type = "error";
+      break;
+  }
+
+  return (
+    <Alert message={message} description={description} type={type} showIcon />
+  );
+};
+
 const CheckReport = () => {
   const router = useRouter();
+  const userContext = useUserContext();
   const [reportStatus, setReportStatus] = useState(initialStatus);
 
-  const onFinish = useCallback(async (values: any) => {
-    if (values.reportNumber === "AD-300324-0001") {
-      setReportStatus({
-        status: "found",
-        message: `Laporan ${values.reportNumber}`,
-        description: "Laporan anda saat ini sedang dalam proses pengecekan",
+  const onFinish = useCallback(
+    async (values: any) => {
+      const response: AxiosResponse<T> = await axios({
+        method: "post",
+        url: process.env.BE_BASEURL + "/api/reports/byNumber",
+        data: { reportNo: values.reportNumber },
+        ...getAuthorization(userContext?.token || ""),
+      }).catch((e) => {
+        return e.response;
       });
-    } else {
-      setReportStatus({
-        status: "not-found",
-        message: `Laporan ${values.reportNumber}`,
-        description: "Tidak ada laporan dengan nomor aduan tersebut",
-      });
-    }
-  }, []);
+
+      if (response?.status === 200 && response?.data?.data) {
+        const { status, notes } = response.data.data;
+        setReportStatus({
+          status: generateReportStatus(status),
+          message: `${values.reportNumber}`,
+          description: generateReportDescription(status, notes),
+        });
+      } else {
+        setReportStatus({
+          status: generateReportStatus(),
+          message: `${values.reportNumber}`,
+          description: generateReportDescription(),
+        });
+      }
+    },
+    [userContext?.token]
+  );
 
   return (
     <Space direction="vertical" style={{ display: "flex" }}>
@@ -86,20 +177,11 @@ const CheckReport = () => {
                   width: "100%",
                 }}
               >
-                {reportStatus.status === "found" && (
-                  <Alert
-                    message={reportStatus.message}
+                {reportStatus.status && (
+                  <AlertResponse
+                    status={reportStatus.status}
                     description={reportStatus.description}
-                    type="info"
-                    showIcon
-                  />
-                )}
-                {reportStatus.status === "not-found" && (
-                  <Alert
                     message={reportStatus.message}
-                    description={reportStatus.description}
-                    type="error"
-                    showIcon
                   />
                 )}
               </Row>

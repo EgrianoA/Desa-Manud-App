@@ -54,6 +54,12 @@ export const SidebarWrapper = () => {
                         icon={<ContainerOutlined />}
                         href="/admin/articles"
                      />
+                     <SidebarItem
+                        isActive={router.pathname === '/admin/reports'}
+                        title="Laporan Warga"
+                        icon={<FileDoneOutlined />}
+                        href="/admin/reports"
+                     />
                   </SidebarMenu>
                </Sidebar.Body>
             </Flex>

@@ -15,6 +15,7 @@ import {
   UserOutlined,
   ContainerOutlined,
   LogoutOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -50,6 +51,11 @@ const menuItems = [
     key: "/admin/articles",
     icon: <ContainerOutlined />,
     label: "Daftar Artikel",
+  },
+  {
+    key: "/admin/reports",
+    icon: <BookOutlined />,
+    label: "Laporan Warga",
   },
 ];
 

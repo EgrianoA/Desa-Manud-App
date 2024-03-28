@@ -62,7 +62,6 @@ const ArticleModal = ({
 
   const closeModal = useCallback(() => {
     closeModalAction(true);
-    setFileList([]);
   }, [closeModalAction]);
 
   useEffect(() => {
@@ -75,6 +74,8 @@ const ArticleModal = ({
         };
       });
       setFileList(initialFileList);
+    } else {
+      setFileList([]);
     }
   }, [articleData?.headerImage]);
 
@@ -91,9 +92,16 @@ const ArticleModal = ({
           url: process.env.BE_BASEURL + "/api/articles",
           data: contentData,
           ...getAuthorization(userContext?.token || ""),
+        }).catch((e) => {
+          return e.response;
         });
 
         if (response?.status === 200) {
+          uploadHeaderImage(
+            fileList,
+            response.data._id,
+            userContext?.token || ""
+          );
           router.reload();
         }
       } else {
@@ -102,6 +110,8 @@ const ArticleModal = ({
           url: process.env.BE_BASEURL + "/api/articles",
           data: { id: articleData._id, ...contentData },
           ...getAuthorization(userContext?.token || ""),
+        }).catch((e) => {
+          return e.response;
         });
 
         if (response?.status === 200) {

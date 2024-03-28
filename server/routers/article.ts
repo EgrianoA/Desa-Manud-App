@@ -9,7 +9,8 @@ import {
 } from "../controllers/article";
 import checkHeaders from "../utils/checkHeaders";
 import { UserRole } from "../models/User";
-const multer = require("multer");
+import multer from "multer";
+
 const upload = multer({
   dest: "uploads/",
   storage: multer.memoryStorage(),
