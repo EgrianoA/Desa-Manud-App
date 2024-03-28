@@ -6,6 +6,7 @@ import Carousel from '../components/portalPage/Carousel'
 import ArticleCard from '../components/portalPage/ArticleCard'
 import React, { useMemo, useState, useCallback } from 'react';
 import { useFetchArticles } from '../api/articles'
+//import { useFetchReports } from '../api/report'
 
 const sectionStyle = {
    minHeight: '20vh'
