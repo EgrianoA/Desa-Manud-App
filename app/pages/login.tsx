@@ -168,10 +168,18 @@ const Login: NextPage = () => {
                 <Button
                   type="default"
                   className="register-form-button"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginBottom: "10px" }}
                   onClick={() => setIsLogin(false)}
                 >
                   <span>Daftar akun baru</span>
+                </Button>
+                <Button
+                  type="default"
+                  className="back-to-main"
+                  style={{ width: "100%" }}
+                  onClick={() => router.replace("/")}
+                >
+                  <span>Kembali ke halaman utama</span>
                 </Button>
               </Form.Item>
             </Form>
@@ -299,10 +307,18 @@ const Login: NextPage = () => {
                 <Button
                   type="default"
                   className="register-form-button"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginBottom: "10px" }}
                   onClick={() => setIsLogin(true)}
                 >
                   <span>Saya sudah punya akun</span>
+                </Button>
+                <Button
+                  type="default"
+                  className="back-to-main"
+                  style={{ width: "100%" }}
+                  onClick={() => router.replace("/")}
+                >
+                  <span>Kembali ke halaman utama</span>
                 </Button>
               </Form.Item>
             </Form>

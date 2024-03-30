@@ -75,8 +75,6 @@ const AdminArticles: NextPage = () => {
     []
   );
 
-  console.log(articleData);
-
   return (
     <>
       <Title level={3}>Daftar Artikel</Title>

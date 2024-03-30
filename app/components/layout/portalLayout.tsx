@@ -49,6 +49,10 @@ const menuItems = [
   {
     label: "Layanan",
     key: "service",
+    children: [
+      { label: "Pelayanan Aduan Desa", key: "/aduan" },
+      { label: "Permintaan Dokumen", key: "/permintaan-dokumen" },
+    ],
   },
   {
     label: "Informasi",

@@ -14,7 +14,7 @@
       "@nextui-org/react": "^1.0.0-beta.10",
       "@uiw/react-md-editor": "^4.0.3",
       "@zeit/next-css": "^1.0.1",
-      "antd": "^5.11.2",
+      "antd": "^5.15.4",
       "apexcharts": "^3.35.5",
       "axios": "^1.6.7",
       "bootstrap": "^5.3.3",

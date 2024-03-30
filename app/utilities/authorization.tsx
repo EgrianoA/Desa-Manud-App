@@ -1,5 +1,11 @@
-import React, { useState, createContext, useContext, useCallback, useEffect } from "react";
-import dayjs from 'dayjs'
+import React, {
+  useState,
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+} from "react";
+import dayjs from "dayjs";
 
 export const getAuthorization = (token: string) => {
   return {
@@ -14,8 +20,8 @@ export const setAuthorization = (token: string) => {
 };
 
 export const clearAuthorization = () => {
-  localStorage.removeItem('token')
-}
+  localStorage.removeItem("token");
+};
 
 export const initialUserContextData = {
   token: undefined,
@@ -24,9 +30,11 @@ export const initialUserContextData = {
   role: undefined,
   userFullName: undefined,
   username: undefined,
-}
+};
 
-export const UserContext = createContext<IUserContextData>(initialUserContextData);
+export const UserContext = createContext<IUserContextData>(
+  initialUserContextData
+);
 export type IUserContextData = {
   token?: string;
   expireAt?: number;
@@ -43,30 +51,36 @@ export const UserContextProvider = ({
 }: {
   children: JSX.Element | React.ReactNode;
 }) => {
-  const [userData, setUserData] = useState<IUserContextData>(initialUserContextData);
+  const [userData, setUserData] = useState<IUserContextData | null>(null);
 
-  const setUserContext = useCallback((newState: IUserContextData) => {
-    setUserData({ ...userData, ...newState })
-  }, [userData])
+  const setUserContext = useCallback(
+    (newState: IUserContextData) => {
+      setUserData({ ...userData, ...newState });
+    },
+    [userData]
+  );
 
-  const getUserContextValue = useCallback(() => ({ setUserContext, ...userData }), [setUserContext, userData])
+  const getUserContextValue = useCallback(
+    () => ({ setUserContext, ...userData }),
+    [setUserContext, userData]
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     if (token) {
-      const tokenData = JSON.parse(token)
+      const tokenData = JSON.parse(token);
       if (dayjs.unix(tokenData.expireAt).isBefore(dayjs())) {
-        localStorage.removeItem("token")
-        setUserData(initialUserContextData)
+        localStorage.removeItem("token");
+        setUserData(initialUserContextData);
       } else {
         setUserData({
           token,
           expireAt: tokenData.expireAt,
           ...tokenData,
-        })
+        });
       }
     }
-  }, [setUserData])
+  }, [setUserData]);
 
   return (
     <UserContext.Provider value={getUserContextValue()}>
