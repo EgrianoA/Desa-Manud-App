@@ -19,22 +19,28 @@ import {
 
 const requireAuthRouter = ["/aduan", "/permintaan-dokumen"];
 
+const checkIsTokenExpired = (tokenData: any) => {
+  console.log(tokenData);
+};
+
 const checkAuth = (
   router: NextRouter,
   currentRouter: string,
   token: string | null
 ) => {
   if (currentRouter.startsWith("/admin")) {
-    if (!token && currentRouter.includes("login")) {
+    if (!token && !currentRouter.includes("login")) {
       router.replace("/admin/login");
     } else if (token && !currentRouter.includes("login")) {
       const tokenData = JSON.parse(token);
+      checkIsTokenExpired(tokenData);
       if (tokenData.role !== "superAdmin" && tokenData.role !== "admin") {
         router.replace("/");
       }
     }
   } else if (
-    !token && requireAuthRouter.find((router) => currentRouter.startsWith(router))
+    !token &&
+    requireAuthRouter.find((router) => currentRouter.startsWith(router))
   ) {
     router.replace("/login");
   }

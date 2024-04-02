@@ -3,22 +3,48 @@ import {
   Col,
   Card,
   Modal,
-  ModalProps,
   Form,
   Input,
   Space,
   Button,
-  Select,
+  UploadFile,
+  UploadProps,
+  Upload,
 } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IArticle } from "../../../api/articles";
 import {
   useUserContext,
   getAuthorization,
 } from "../../../utilities/authorization";
-import { UserRole } from "../../../api/users";
+import getFileUrl from "../../../utilities/getFileUrl";
+import sendFileToServer from "../../../api/sendFileToServer";
+
+const uploadHeaderImage = async (
+  fileList: UploadFile[],
+  articleId: string,
+  token: string
+) => {
+  const form = new FormData();
+  await Promise.all(
+    fileList.map(async (file) => {
+      if (file.url) {
+        const fileBlob = await axios.get(file.url, { responseType: "blob" });
+        form.append(
+          "headerImages",
+          new File([fileBlob.data], file.name) as Blob
+        );
+      } else if (file.originFileObj) {
+        form.append("headerImages", file.originFileObj as Blob);
+      }
+    })
+  );
+
+  sendFileToServer(form, `/api/articles/uploadHeaderImage/${articleId}`, token);
+};
 
 const ArticleModal = ({
   closeModalAction,
@@ -29,42 +55,65 @@ const ArticleModal = ({
   visible: boolean;
   articleData?: IArticle | null;
 }) => {
+  const { TextArea } = Input;
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const userContext = useUserContext();
+  const router = useRouter();
+
   const closeModal = useCallback(() => {
     closeModalAction(true);
   }, [closeModalAction]);
 
-  const { TextArea } = Input;
-  const userContext = useUserContext();
-  const router = useRouter();
+  useEffect(() => {
+    if (articleData?.headerImage.length) {
+      const initialFileList = articleData.headerImage.map((image) => {
+        return {
+          uid: image._id,
+          name: image.filename,
+          url: getFileUrl(image),
+        };
+      });
+      setFileList(initialFileList);
+    }
+  }, [articleData?.headerImage]);
+
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
 
   const onFinish = useCallback(
     async (values: any) => {
       //if no article data -> create new. Else update
+      const { headerImage, ...contentData } = values;
       if (!articleData?._id) {
         const response: AxiosResponse<T> = await axios({
           method: "post",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: values,
+          data: contentData,
           ...getAuthorization(userContext?.token || ""),
         });
 
         if (response?.status === 200) {
-          closeModal();
+          router.reload();
         }
       } else {
         const response: AxiosResponse<T> = await axios({
           method: "patch",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: { id: articleData._id, ...values },
+          data: { id: articleData._id, ...contentData },
           ...getAuthorization(userContext?.token || ""),
         });
 
         if (response?.status === 200) {
-          closeModal();
+          uploadHeaderImage(
+            fileList,
+            response.data._id,
+            userContext?.token || ""
+          );
+          router.reload();
         }
       }
     },
-    [articleData?._id, closeModal, userContext?.token]
+    [articleData?._id, fileList, router, userContext?.token]
   );
 
   const onDelete = useCallback((id: string) => {
@@ -119,7 +168,25 @@ const ArticleModal = ({
                   <Input placeholder="" />
                 </Form.Item>
                 <Form.Item label="Isi Artikel" name="content">
-                  <TextArea placeholder="" />
+                  <TextArea placeholder="" rows={10} />
+                </Form.Item>
+                <Form.Item label="Gambar Artikel" name="headerImage">
+                  <Upload
+                    accept=".jpg,.jpeg,.png,.mp4"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={handleChange}
+                  >
+                    {fileList.length >= 5 ? null : (
+                      <button
+                        style={{ border: 0, background: "none" }}
+                        type="button"
+                      >
+                        <PlusOutlined />
+                        <div style={{ marginTop: 8 }}>Upload</div>
+                      </button>
+                    )}
+                  </Upload>
                 </Form.Item>
                 <center>
                   <Button type="primary" htmlType="submit">
@@ -137,16 +204,14 @@ const ArticleModal = ({
 const useArticleModal = () => {
   const [visible, setVisible] = useState(false);
   const [articleData, setArticleData] = useState<IArticle | null>(null);
-  const [loggedUserRole, setLoggedUserRole] = useState<UserRole | null>(null);
 
   const actions = useMemo(() => {
     const close = () => setVisible(false);
 
     return {
-      open: (articleData: IArticle | null, role: UserRole | null) => {
+      open: (articleData: IArticle | null) => {
         setArticleData(articleData);
         setVisible(true);
-        setLoggedUserRole(role);
       },
       close,
     };

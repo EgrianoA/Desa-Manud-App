@@ -1,8 +1,9 @@
 import { useState } from "react";
 import useApiHooks, { errorResponse } from "../utilities/useApiHooks";
+import { UploadedFile } from "./types/uploadedfile";
+import { IUser } from "./users";
 
-export type HeaderImage = {
-  url: string;
+export type HeaderImage = UploadedFile & {
   description: string;
   alt: string;
 };
@@ -14,6 +15,8 @@ export type IArticle = {
   creatorName: string;
   headerImage: HeaderImage[];
   createdAt: Date;
+  slugname: string;
+  creator: Pick<IUser, "userFullName">;
 };
 
 type FetchArticleParams = {
@@ -53,8 +56,9 @@ export const useFetchArticleBySlugname = ({
       method: "get",
       url: `${process.env.BE_BASEURL}/api/articles/${slugname}`,
     });
+
     return response;
   } catch {
-    return response;
+    return response.errorResponse;
   }
 };

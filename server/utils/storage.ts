@@ -4,16 +4,18 @@ import mime from "mime-types";
 import { ItemBucketMetadata, Client } from "minio";
 import { ObjectId } from "mongodb";
 import { Dictionary } from "ts-essentials";
-import urlJoin from "url-join";
 import { Readable, Writable } from "stream";
 import { BufferListStream } from "bl";
+import { compact } from "lodash/fp";
 
 const config = {
   storage: {
     provider: {
-      endPoint: process.env.STORAGE_ENDPOINT || "",
-      accessKey: process.env.STORAGE_ACCESS_KEY || "",
-      secretKey: process.env.STORAGE_SECRET_KEY || "",
+      endPoint: process.env.STORAGE_ENDPOINT || "localhost",
+      accessKey: process.env.STORAGE_ACCESS_KEY || "AKIAIOSFODNN7EXAMPLE",
+      secretKey:
+        process.env.STORAGE_SECRET_KEY ||
+        "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
       useSSL: process.env.STORAGE_SSL === "true" ? true : false,
       port:
         process.env.STORAGE_PORT && !isNaN(parseInt(process.env.STORAGE_PORT))
@@ -23,16 +25,18 @@ const config = {
     },
     privateBucket: process.env.STORAGE_PRIVATE_BUCKET || "app-private",
     publicBucket: process.env.STORAGE_PUBLIC_BUCKET || "app-public",
-    publicEndpoint: process.env.STORAGE_PUBLIC_ENDPOINT || "",
+    publicEndpoint:
+      process.env.STORAGE_PUBLIC_ENDPOINT ||
+      "http://localhost:9000/app-public/",
   },
 };
 
-enum BucketType {
+export enum BucketType {
   Public = "public",
   Private = "private",
 }
 
-interface UploadedFile {
+export interface UploadedFile {
   _id: ObjectId;
   filename: string;
   displayName: string;
@@ -100,38 +104,44 @@ export const uploadFile = async (
   filename: string,
   stream: ReadableStream | Buffer | string,
   metadata?: ItemBucketMetadata
-): Promise<UploadedFile> => {
-  const fileId = new ObjectId();
-  const ext = path.extname(filename);
-  const objectName = path
-    .join(dirName, `${fileId}${ext}`)
-    .replaceAll("\\", "/");
-  const bucket = getBucketName(bucketType);
-  const meta: ItemBucketMetadata = {
-    ...metadata,
-    "Content-Type": mime.lookup(filename),
-    ContentType: mime.lookup(filename),
-  };
+): Promise<UploadedFile | null> => {
+  try {
+    const fileId = new ObjectId();
+    const ext = path.extname(filename);
+    const objectName = path
+      .join(dirName, `${fileId}${ext}`)
+      .replaceAll("\\", "/");
+    const bucket = getBucketName(bucketType);
+    const meta: ItemBucketMetadata = {
+      ...metadata,
+      "Content-Type": mime.lookup(filename),
+      ContentType: mime.lookup(filename),
+    };
 
-  // upload it at first
-  const { etag } = await minioClient.putObject(bucket, objectName, stream, {
-    ...meta,
-    _id: fileId.toHexString(),
-  });
+    const buckets = await minioClient.listBuckets();
 
-  // get stats from it
-  const stats = await minioClient.statObject(bucket, objectName);
+    // upload it at first
+    const { etag } = await minioClient.putObject(bucket, objectName, stream, {
+      ...meta,
+      _id: fileId.toHexString(),
+    });
 
-  return {
-    _id: fileId,
-    filename,
-    displayName: filename,
-    uploadedAt: new Date(),
-    etag,
-    size: stats.size,
-    objectName,
-    bucketType,
-  };
+    // get stats from it
+    const stats = await minioClient.statObject(bucket, objectName);
+
+    return {
+      _id: fileId,
+      filename,
+      displayName: filename,
+      uploadedAt: new Date(),
+      etag,
+      size: stats.size,
+      objectName,
+      bucketType,
+    };
+  } catch (e) {
+    return null;
+  }
 };
 
 export const getSignedUrlOnUploadedFile = (
@@ -185,7 +195,7 @@ export const handleFileUpload = async (
   dirName: string,
   upload: FileUpload,
   metadata?: ItemBucketMetadata
-): Promise<UploadedFile> =>
+): Promise<UploadedFile | null> =>
   uploadFile(bucketType, dirName, upload.filename, upload.buffer, metadata);
 
 export const handleMultipleFileUpload = async (
@@ -193,19 +203,31 @@ export const handleMultipleFileUpload = async (
   dirName: string,
   uploads: FileUpload[],
   metadata?: ItemBucketMetadata
-): Promise<UploadedFile[]> =>
-  Promise.all(
-    uploads.map((upload) =>
-      handleFileUpload(bucketType, dirName, upload, metadata)
-    )
+): Promise<UploadedFile[]> => {
+  const uploadedFilesData = await Promise.all(
+    uploads.map((upload) => {
+      const uploadedFileData = handleFileUpload(
+        bucketType,
+        dirName,
+        upload,
+        metadata
+      );
+      if (uploadedFileData) {
+        return uploadedFileData;
+      }
+      return null;
+    })
   );
+
+  return compact(uploadedFilesData);
+};
 
 export const cloneFile = async (
   dirName: string,
   upload: UploadedFile,
   metadata?: ItemBucketMetadata,
   bucketType?: BucketType
-): Promise<UploadedFile> => {
+): Promise<UploadedFile | null> => {
   const stream = await getFileStream(upload);
 
   return uploadFile(
@@ -227,7 +249,7 @@ export const getUrlForUpload = async (
 
   switch (uploadFile.bucketType) {
     case BucketType.Public:
-      return urlJoin(config.storage.publicEndpoint, uploadFile.objectName);
+      return `${config.storage.publicEndpoint}/${uploadFile.objectName}`;
 
     default:
       return getSignedUrlOnUploadedFile(uploadFile, expiry);

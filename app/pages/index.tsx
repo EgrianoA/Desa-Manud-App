@@ -5,7 +5,8 @@ import styled from "styled-components";
 import Carousel from "../components/portalPage/Carousel";
 import ArticleCard from "../components/portalPage/ArticleCard";
 import React, { useMemo, useState, useCallback } from "react";
-import { useFetchArticles } from "../api/articles";
+import { IArticle, useFetchArticles } from "../api/articles";
+import getFileUrl from "../utilities/getFileUrl";
 
 const sectionStyle = {
   minHeight: "20vh",
@@ -14,7 +15,11 @@ const sectionStyle = {
 const Home: NextPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
-  const { data: dataSource, loading, error } = useFetchArticles({ page, size });
+  const {
+    data: dataSource,
+    loading,
+    error,
+  } = useFetchArticles({ page, pageSize: size });
   const articleSourceData = useMemo(() => {
     if (dataSource) {
       return dataSource.data || [];
@@ -25,8 +30,8 @@ const Home: NextPage = () => {
 
   const articleData = useMemo(
     () =>
-      articleSourceData.map((article) => ({
-        image: article.headerImage[0]?.url || "",
+      articleSourceData.map((article: IArticle) => ({
+        image: getFileUrl(article.headerImage[0]),
         title: article.title,
         content: article.content,
         slugname: article.slugname,

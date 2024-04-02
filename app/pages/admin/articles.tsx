@@ -96,7 +96,7 @@ const AdminArticles: NextPage = () => {
         style={{ marginTop: "20px" }}
         onRow={(row: any) => ({
           onClick: () => {
-            articleModal.open(row, userContext.role);
+            articleModal.open(row);
           },
           style: { cursor: "pointer" },
         })}

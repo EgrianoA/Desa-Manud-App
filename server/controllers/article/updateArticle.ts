@@ -5,7 +5,7 @@ import { IRequestWithUserData } from "../../utils/checkHeaders";
 const updateArticle = async (req: IRequestWithUserData, res: Response) => {
   try {
     const { body: updatedValue } = req;
-    console.log(updatedValue)
+
     if (!updatedValue.id) {
       return res.status(400).json({ message: "Invalid value" });
     }

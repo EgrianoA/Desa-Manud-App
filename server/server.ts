@@ -4,12 +4,14 @@ import mongoose, { ConnectOptions } from "mongoose";
 import router from "./routers";
 import morgan from "morgan";
 import cors from "cors";
+import multer from "multer";
 
 //For env File
 dotenv.config();
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3001;
+const upload = multer();
 
 mongoose
   .connect(

@@ -5,8 +5,10 @@ import { Text } from "@nextui-org/react";
 import { useMemo, useState, useCallback, useEffect } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { useFetchArticles } from "../../api/articles";
+import { IArticle, useFetchArticles } from "../../api/articles";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useRouter } from "next/router";
+import getFileUrl from "../../utilities/getFileUrl";
 
 const ArticleListContainer = styled.div`
   margin: 40px 30vw;
@@ -31,7 +33,8 @@ const Article: NextPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
-  const [articleData, setArticleData] = useState([]);
+  const [articleData, setArticleData] = useState<IArticle[]>([]);
+  const router = useRouter();
 
   const {
     data: dataSource,
@@ -103,11 +106,11 @@ const Article: NextPage = () => {
                   <Col span={6}>
                     <Image
                       preview={false}
-                      src={article?.headerImage[0]?.url || ""}
+                      src={getFileUrl(article?.headerImage[0])}
                       alt={article?.headerImage[0]?.alt || ""}
                     />
                   </Col>
-                  <Col span={18}>
+                  <Col span={16} style={{ marginLeft: "20px" }}>
                     <p>
                       {shortenContent(article.content.replaceAll("\n", " "))}
                     </p>

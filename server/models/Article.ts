@@ -1,8 +1,8 @@
 import { ObjectId } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
+import { UploadedFile } from "../utils/storage";
 
-type HeaderImage = {
-  url: string;
+type HeaderImage = UploadedFile & {
   description: string;
   alt: string;
 };
