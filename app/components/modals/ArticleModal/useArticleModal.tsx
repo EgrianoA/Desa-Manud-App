@@ -62,6 +62,7 @@ const ArticleModal = ({
 
   const closeModal = useCallback(() => {
     closeModalAction(true);
+    setFileList([]);
   }, [closeModalAction]);
 
   useEffect(() => {
