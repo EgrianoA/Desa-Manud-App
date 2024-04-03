@@ -9,12 +9,12 @@ import {
   Select,
   Upload,
   message,
+  Alert,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios, { AxiosResponse } from "axios";
-import { useRouter } from "next/router";
-import React, { useCallback, useMemo, useState } from "react";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
+import type { UploadFile, UploadProps } from "antd";
 import sendFileToServer from "../../../api/sendFileToServer";
 import {
   getAuthorization,
@@ -42,12 +42,14 @@ const uploadAttachment = async (
   );
 };
 
-const NewReport = () => {
+const NewReport = ({ currentTab }: { currentTab: string }) => {
   const { TextArea } = Input;
   const [messageApi, contextHolder] = message.useMessage();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [reportSubmitted, setReportSubmitted] = useState<boolean>(false);
+  const [reportNo, setReportNo] = useState<string>();
   const userContext = useUserContext();
-  const router = useRouter();
+  const [form] = Form.useForm();
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
@@ -68,10 +70,11 @@ const NewReport = () => {
       if (response?.status === 200) {
         uploadAttachment(fileList, response.data._id, userContext?.token || "");
         messageApi.success("Terima kasih, laporan anda telah kami terima");
-        router.reload();
+        setReportSubmitted(true);
+        setReportNo(response.data.reportNo);
       }
     },
-    [fileList, messageApi, router, userContext?.token]
+    [fileList, messageApi, userContext?.token]
   );
 
   return (
@@ -136,6 +139,29 @@ const NewReport = () => {
                   Simpan
                 </Button>
               </center>
+              <Row
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "30px",
+                  width: "100%",
+                }}
+              >
+                {reportSubmitted && reportNo && (
+                  <Alert
+                    message="Terima kasih, laporan Anda telah kami terima."
+                    description={
+                      <p>
+                        Silahkan simpan nomor laporan berikut untuk mengecek
+                        status laporan Anda: <br />
+                        <strong>{reportNo}</strong>
+                      </p>
+                    }
+                    type="info"
+                    showIcon
+                  />
+                )}
+              </Row>
             </Card>
           </Form>
         </Col>
