@@ -1,16 +1,7 @@
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Space,
-  Button,
-  Alert,
-} from "antd";
+import { Row, Col, Card, Form, Input, Space, Button, Alert } from "antd";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getAuthorization,
   useUserContext,
@@ -104,8 +95,9 @@ const AlertResponse = ({
   );
 };
 
-const CheckReport = () => {
+const CheckReport = ({ currentTab }: { currentTab: string }) => {
   const router = useRouter();
+  const [form] = Form.useForm();
   const userContext = useUserContext();
   const [reportStatus, setReportStatus] = useState(initialStatus);
 
