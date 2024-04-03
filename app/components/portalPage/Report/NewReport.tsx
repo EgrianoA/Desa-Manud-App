@@ -37,7 +37,7 @@ const uploadAttachment = async (
 
   sendFileToServer(
     form,
-    `/api/articles/uploadReportAttachment/${reportId}`,
+    `/api/reports/uploadReportAttachment/${reportId}`,
     token
   );
 };
