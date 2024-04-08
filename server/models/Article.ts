@@ -12,6 +12,7 @@ enum ArticleKind {
   Kebersihan = "kebersihan",
   Kesehatan = "kesehatan",
   ProgramKerja = "programKerja",
+  Kemitraan = "kemitraan",
 }
 
 export type IArticle = {

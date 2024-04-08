@@ -50,9 +50,13 @@ const menuItems = [
   { key: "/admin", icon: <HomeOutlined />, label: "Beranda" },
   { key: "/admin/users", icon: <UserOutlined />, label: "Daftar Pengguna" },
   {
-    key: "/admin/articles",
     icon: <ContainerOutlined />,
-    label: "Daftar Artikel",
+    label: "Informasi",
+    children: [
+      { label: "Berita Desa", key: "/admin/articles" },
+      { label: "Kemitraan", key: "/admin/partnership" },
+      { label: "Program Kerja", key: "/admin/achievements" },
+    ],
   },
   {
     key: "/admin/reports",

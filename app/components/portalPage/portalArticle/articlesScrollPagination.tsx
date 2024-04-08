@@ -1,25 +1,25 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { IArticle } from "../api/articles";
+import { ArticleKind, IArticle } from "../../../api/articles";
 import { Card, Col, Row, Image } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import getFileUrl from "../utilities/getFileUrl";
-import { shortenContent } from "../utilities/contentManipulation";
+import getFileUrl from "../../../utilities/getFileUrl";
+import { shortenContent } from "../../../utilities/contentManipulation";
 
 type ArticleScrollPaginationProps = {
   setPage: (page: number) => void;
   articleData: IArticle[];
   page: number;
   total: number;
-  articleRouter: "artikel" | "program-kesehatan" | "program-kebersihan";
+  articleKind: ArticleKind;
 };
 const ArticleScollPagination = ({
   articleData,
   page,
   setPage,
   total,
-  articleRouter,
+  articleKind,
 }: ArticleScrollPaginationProps) => {
   const router = useRouter();
   const refresh = useCallback(() => {
@@ -30,6 +30,25 @@ const ArticleScollPagination = ({
       setPage(page + 1);
     }
   }, [articleData.length, page, total]);
+
+  const articleRouter = useMemo(() => {
+    switch (articleKind) {
+      case ArticleKind.Kebersihan:
+        return "program-kebersihan";
+
+      case ArticleKind.Kemitraan:
+        return "informasi-kemitraan";
+
+      case ArticleKind.Kesehatan:
+        return "program-kesehatan";
+
+      case ArticleKind.ProgramKerja:
+        return "pencapaian-program-kerja";
+
+      default:
+        return "artikel";
+    }
+  }, [articleKind]);
 
   return (
     <InfiniteScroll

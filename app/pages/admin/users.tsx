@@ -1,5 +1,6 @@
-import { Table, Tag, Typography } from "antd";
+import { Button, Row, Col, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import type { NextPage } from "next";
 import React, { useMemo, useState, useCallback } from "react";
 import useUserModal from "../../components/modals/UserModal/useUserModal";
@@ -73,7 +74,19 @@ const AdminUsers: NextPage = () => {
   return (
     <>
       <Title level={3}>Daftar Pengguna</Title>
-
+      <Row style={{ display: "flex", justifyContent: "end" }}>
+        <Col>
+          <Button
+            icon={<PlusCircleOutlined />}
+            onClick={() => {
+              userModal.open(null, userContext.role);
+            }}
+            type="primary"
+          >
+            Tambah Pengguna
+          </Button>
+        </Col>
+      </Row>
       <Table
         columns={columns}
         dataSource={userData}

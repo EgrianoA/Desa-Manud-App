@@ -50,10 +50,12 @@ const ArticleModal = ({
   closeModalAction,
   visible,
   articleData,
+  articleKind,
 }: {
   closeModalAction: (action: boolean) => void;
   visible: boolean;
   articleData?: IArticle | null;
+  articleKind: ArticleKind;
 }) => {
   const { TextArea } = Input;
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -90,7 +92,7 @@ const ArticleModal = ({
         const response: AxiosResponse<T> = await axios({
           method: "post",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: { ...contentData, type: ArticleKind.Umum },
+          data: { ...contentData, type: articleKind },
           ...getAuthorization(userContext?.token || ""),
         }).catch((e) => {
           return e.response;
@@ -124,7 +126,7 @@ const ArticleModal = ({
         }
       }
     },
-    [articleData?._id, fileList, router, userContext?.token]
+    [articleData?._id, articleKind, fileList, router, userContext?.token]
   );
 
   const onDelete = useCallback((id: string) => {
@@ -175,10 +177,10 @@ const ArticleModal = ({
                   )
                 }
               >
-                <Form.Item label="Judul Artikel" name="title">
+                <Form.Item label="Judul Informasi" name="title">
                   <Input placeholder="" />
                 </Form.Item>
-                <Form.Item label="Isi Artikel" name="content">
+                <Form.Item label="Isi Informasi" name="content">
                   <TextArea placeholder="" rows={10} />
                 </Form.Item>
                 <Form.Item label="Gambar Artikel" name="headerImage">
@@ -188,7 +190,7 @@ const ArticleModal = ({
                     fileList={fileList}
                     onChange={handleChange}
                   >
-                    {fileList.length >= 5 ? null : (
+                    {fileList.length >= 2 ? null : (
                       <button
                         style={{ border: 0, background: "none" }}
                         type="button"
@@ -212,7 +214,7 @@ const ArticleModal = ({
     </Modal>
   );
 };
-const useArticleModal = () => {
+const useArticleModal = (articleKind: ArticleKind) => {
   const [visible, setVisible] = useState(false);
   const [articleData, setArticleData] = useState<IArticle | null>(null);
 
@@ -233,6 +235,7 @@ const useArticleModal = () => {
     render: () => (
       <ArticleModal
         articleData={articleData}
+        articleKind={articleKind}
         closeModalAction={actions.close}
         visible={visible}
       />

@@ -14,7 +14,7 @@ type UserRegisterType = Pick<
 const register = async (req: Request, res: Response) => {
   try {
     const { username, email, userFullName, password, role }: IUser = req.body;
-    console.log(req.body);
+
     if (
       isEmpty(username) ||
       isEmpty(email) ||

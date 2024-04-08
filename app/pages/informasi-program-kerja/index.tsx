@@ -3,7 +3,7 @@ import { ArticleKind } from "../../api/articles";
 import SharedArticleList from "../../components/portalPage/portalArticle/sharedPortalArticlePage";
 
 const Article: NextPage = () => {
-  return <SharedArticleList articleKind={ArticleKind.Umum} />;
+  return <SharedArticleList articleKind={ArticleKind.ProgramKerja} />;
 };
 
 export default Article;

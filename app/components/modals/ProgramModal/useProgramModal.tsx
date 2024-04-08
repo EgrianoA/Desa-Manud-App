@@ -175,7 +175,7 @@ const ProgramModal = ({
                     fileList={fileList}
                     onChange={handleChange}
                   >
-                    {fileList.length >= 5 ? null : (
+                    {fileList.length >= 2 ? null : (
                       <button
                         style={{ border: 0, background: "none" }}
                         type="button"

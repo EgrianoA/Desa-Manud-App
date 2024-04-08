@@ -1,46 +1,26 @@
-import { Button, Table, Typography, Row, Col, Tag } from "antd";
+import { Col, Row, Table, Typography, Button } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import type { NextPage } from "next";
 import React, { useMemo, useState, useCallback } from "react";
-import useProgramModal from "../../components/modals/ProgramModal/useProgramModal";
-import { ArticleKind, IArticle, useFetchArticles } from "../../api/articles";
+import useArticleModal from "./modals/ArticleModal/useArticleModal";
+import { ArticleKind, IArticle, useFetchArticles } from "../api/articles";
 import dayjs from "dayjs";
-import { useUserContext } from "../../utilities/authorization";
 
-type ProgramDataType = IArticle & {
+type ArticleDataType = IArticle & {
   key: string;
-};
-
-const programType = (program: ArticleKind): React.ReactNode => {
-  switch (program) {
-    case ArticleKind.Kebersihan:
-      return <Tag color="blue">Kebersihan</Tag>;
-
-    case ArticleKind.Kesehatan:
-      return <Tag color="green">Kesehatan</Tag>;
-
-    default:
-      return <Tag>{program}</Tag>;
-  }
 };
 
 const { Title } = Typography;
 
-const columns: ColumnsType<ProgramDataType> = [
+const columns: ColumnsType<ArticleDataType> = [
   {
-    title: "Program",
+    title: "Title",
     dataIndex: "title",
     key: "title",
   },
   {
-    title: "Tipe Program",
-    dataIndex: "type",
-    key: "type",
-    render: (type) => <>{programType(type)}</>,
-  },
-  {
-    title: "Nama Pembuat",
+    title: "Nama Penulis",
     dataIndex: "creator",
     key: "creator",
     render: (creator) => <>{creator.userFullName}</>,
@@ -55,8 +35,12 @@ const columns: ColumnsType<ProgramDataType> = [
   },
 ];
 
-const AdminPrograms: NextPage = () => {
-  const programModal = useProgramModal();
+type SharedArticlePageProps = {
+  articleKind: ArticleKind;
+};
+
+const SharedArticlePage = ({ articleKind }: SharedArticlePageProps) => {
+  const articleModal = useArticleModal(articleKind);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(10);
@@ -67,8 +51,9 @@ const AdminPrograms: NextPage = () => {
   } = useFetchArticles({
     page,
     pageSize: size,
-    query: { types: [ArticleKind.Kebersihan, ArticleKind.Kesehatan] },
+    query: { types: [articleKind] },
   });
+
   const articleData = useMemo(() => {
     if (dataSource) {
       setTotal(dataSource.count);
@@ -78,7 +63,6 @@ const AdminPrograms: NextPage = () => {
     return [];
   }, [dataSource]);
 
-  const userContext = useUserContext();
   const onPaginationTableChange = useCallback(
     (page: number, pageSize: number) => {
       setPage(page);
@@ -87,30 +71,51 @@ const AdminPrograms: NextPage = () => {
     []
   );
 
+  const pageCopywriting = useMemo(() => {
+    switch (articleKind) {
+      case ArticleKind.Kemitraan:
+        return {
+          title: "Informasi Kemitraan",
+          buttonText: "Buat Informasi Kemitraan",
+        };
+
+      case ArticleKind.ProgramKerja:
+        return {
+          title: "Informasi Program Kerja",
+          buttonText: "Buat Informasi Program Kerja",
+        };
+
+      default:
+        return {
+          title: "Informasi & Berita Desa",
+          buttonText: "Buat Informasi Baru",
+        };
+    }
+  }, [articleKind]);
+
   return (
     <>
-      <Title level={3}>Daftar Artikel</Title>
+      <Title level={3}>{pageCopywriting.title}</Title>
       <Row style={{ display: "flex", justifyContent: "end" }}>
         <Col>
           <Button
             icon={<PlusCircleOutlined />}
             onClick={() => {
-              programModal.open(null);
+              articleModal.open(null);
             }}
             type="primary"
           >
-            Buat Program
+            {pageCopywriting.buttonText}
           </Button>
         </Col>
       </Row>
-
       <Table
         columns={columns}
         dataSource={articleData}
         style={{ marginTop: "20px" }}
         onRow={(row: any) => ({
           onClick: () => {
-            programModal.open(row, userContext.role);
+            articleModal.open(row);
           },
           style: { cursor: "pointer" },
         })}
@@ -122,9 +127,10 @@ const AdminPrograms: NextPage = () => {
           onChange: onPaginationTableChange,
         }}
       />
-      {programModal.render()}
+
+      {articleModal.render()}
     </>
   );
 };
 
-export default AdminPrograms;
+export default SharedArticlePage;
