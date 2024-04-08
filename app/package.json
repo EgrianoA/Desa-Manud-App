@@ -29,6 +29,7 @@
       "react-apexcharts": "^1.4.0",
       "react-dom": "18.2.0",
       "react-infinite-scroll-component": "^6.1.0",
+      "react-player": "^2.15.1",
       "recharts": "^2.10.1",
       "styled-components": "^6.1.8",
       "webpack": "^5.90.3"
