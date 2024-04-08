@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getUsers } from "../controllers/user";
+import { register, login, getUsers, updateUser } from "../controllers/user";
 import checkHeaders from "../utils/checkHeaders";
 import { UserRole } from "../models/User";
 
@@ -11,6 +11,11 @@ userRouter.get(
   "/",
   (req, res, next) => checkHeaders(req, res, next, UserRole.Admin),
   getUsers
+);
+userRouter.patch(
+  "/",
+  (req, res, next) => checkHeaders(req, res, next, UserRole.Admin),
+  updateUser
 );
 
 export default userRouter;

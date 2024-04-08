@@ -281,6 +281,7 @@ const Login: NextPage = () => {
                   {
                     type: "string",
                     min: 16,
+                    max: 16,
                     message: "Silahkan masukkan NIK anda dengan sesuai",
                   },
                   {

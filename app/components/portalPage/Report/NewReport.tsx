@@ -123,7 +123,7 @@ const NewReport = ({ currentTab }: { currentTab: string }) => {
                   fileList={fileList}
                   onChange={handleChange}
                 >
-                  {fileList.length >= 5 ? null : (
+                  {fileList.length >= 2 ? null : (
                     <button
                       style={{ border: 0, background: "none" }}
                       type="button"
@@ -149,7 +149,7 @@ const NewReport = ({ currentTab }: { currentTab: string }) => {
               >
                 {reportSubmitted && reportNo && (
                   <Alert
-                    message="Terima kasih, laporan Anda telah kami terima."
+                    message="Laporan terkirim!"
                     description={
                       <p>
                         Silahkan simpan nomor laporan berikut untuk mengecek

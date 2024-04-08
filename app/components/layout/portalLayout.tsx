@@ -58,9 +58,12 @@ const menuItems = [
     label: "Informasi",
     key: "artikel",
     children: [
+      { label: "Pencapaian Program Kerja", key: "/pencapaian-program-kerja" },
       { label: "Informasi & Berita Desa", key: "/artikel" },
       { label: "Informasi Program Kesehatan", key: "/program-kesehatan" },
       { label: "Informasi Program Kebersihan", key: "/program-kebersihan" },
+      { label: "Informasi Kemitraan", key: "/informasi-kemitraan" },
+      { label: "Informasi Keamanan", key: "/informasi-keamanan" },
     ],
   },
 ];

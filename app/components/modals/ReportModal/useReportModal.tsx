@@ -36,10 +36,10 @@ const reportType = (type: ReportType): string => {
 
 const reportStatusOptions = [
   { label: "Laporan Baru", value: StatusType.New },
-  { label: "Dalam Pengecekan", value: StatusType.OnCheck },
-  { label: "Laporan Dibatalkan", value: StatusType.Cancelled },
+  { label: "Diproses", value: StatusType.OnCheck },
+  // { label: "Laporan Dibatalkan", value: StatusType.Cancelled },
   { label: "Laporan Ditolak", value: StatusType.Rejected },
-  { label: "Laporan Selesai Diproses", value: StatusType.Done },
+  { label: "Laporan Selesai", value: StatusType.Done },
 ];
 
 const ReportModal = ({
