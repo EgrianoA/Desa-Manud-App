@@ -63,9 +63,9 @@ const menuItems = [
       { label: "Informasi Program Kesehatan", key: "/program-kesehatan" },
       { label: "Informasi Program Kebersihan", key: "/program-kebersihan" },
       { label: "Informasi Kemitraan", key: "/informasi-kemitraan" },
-      { label: "Informasi Keamanan", key: "/informasi-keamanan" },
+      { label: "Informasi Keamanan", key: "/cctv" },
     ],
-  },
+  }
 ];
 
 const dropdownItems = [
