@@ -1,11 +1,13 @@
 import { Text } from "@nextui-org/react";
 import { NextPage } from "next/types";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Grid } from "antd";
 import Carousel from "../components/portalPage/Carousel";
 import ArticleCard from "../components/portalPage/ArticleCard";
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState } from "react";
 import { ArticleKind, IArticle, useFetchArticles } from "../api/articles";
 import getFileUrl from "../utilities/getFileUrl";
+
+const { useBreakpoint } = Grid;
 
 const sectionStyle = {
   minHeight: "20vh",
@@ -14,6 +16,8 @@ const sectionStyle = {
 const Home: NextPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
+  const screens = useBreakpoint();
+
   const {
     data: dataSource,
     loading,
@@ -44,12 +48,24 @@ const Home: NextPage = () => {
     [articleSourceData]
   );
 
+  const bodyPadding = useMemo(() => {
+    if (screens.xxl) {
+      return { padding: "40px 15vw 40px 15vw" };
+    }
+    if (screens.lg) {
+      return { padding: "40px 5vw 40px 5vw" };
+    }
+    if (screens.xs || screens.sm) {
+      return { padding: "40px 20px 40px 20px" };
+    }
+  }, [screens]);
+
   return (
     <div style={{}}>
       <Row style={{ backgroundColor: "blue" }}>
         <Carousel carouselData={articleData.slice(0, 3)} />
       </Row>
-      <div style={{ padding: "40px 15vw" }}>
+      <div style={{ ...bodyPadding }}>
         <Row style={sectionStyle}>
           <Col span={24}>
             <Row

@@ -38,7 +38,11 @@ const Carousel = ({ carouselData }: { carouselData: CarouselContent[] }) => {
 
   return (
     <CarouselContainer>
-      <CCarousel controls indicators>
+      <CCarousel
+        controls={carouselData.length > 1 ? true : false}
+        indicators
+        interval={carouselData.length > 1 ? true : false}
+      >
         {carouselData.map((data) => (
           <CCarouselItem key={data.title}>
             <CImage src={data.image} alt={data.alt} />

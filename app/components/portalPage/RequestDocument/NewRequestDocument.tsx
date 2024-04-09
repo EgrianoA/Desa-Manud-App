@@ -10,17 +10,16 @@ import {
   Upload,
   message,
   Alert,
+  DatePicker,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import axios, { AxiosResponse } from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import type { UploadFile, UploadProps } from "antd";
 import sendFileToServer from "../../../api/sendFileToServer";
 import {
   getAuthorization,
   useUserContext,
 } from "../../../utilities/authorization";
-import { TuiDatePicker } from 'nextjs-tui-date-picker';
 
 const uploadAttachment = async (
   fileList: UploadFile[],
@@ -108,9 +107,18 @@ const NewRequestDocument = ({ currentTab }: { currentTab: string }) => {
               <Form.Item label="Jenis Dokumen" name="tipe_dokumen">
                 <Select
                   options={[
-                    { value: "keterangan-domisili", label: "Surat Keterangan Domisili" },
-                    { value: "pengantar-nikah", label: "Surat Pengantar Nikah" },
-                    { value: "keterangan-tidak-mampu", label: "Surat Keterangan Tidak Mampu" },
+                    {
+                      value: "keterangan-domisili",
+                      label: "Surat Keterangan Domisili",
+                    },
+                    {
+                      value: "pengantar-nikah",
+                      label: "Surat Pengantar Nikah",
+                    },
+                    {
+                      value: "keterangan-tidak-mampu",
+                      label: "Surat Keterangan Tidak Mampu",
+                    },
                     { value: "surat-izin-usaha", label: "Surat Izin Usaha" },
                   ]}
                 />
@@ -122,11 +130,7 @@ const NewRequestDocument = ({ currentTab }: { currentTab: string }) => {
                 <Input placeholder="Tempat lahir " />
               </Form.Item>
               <Form.Item label="Tanggal Lahir" name="tanggal_lahir">
-                <TuiDatePicker
-                    handleChange={() => console.log('Hello world!')}
-                    inputWidth={140}
-                    fontSize={16}
-                />
+                <DatePicker format="DD-MM-YYYY" />
               </Form.Item>
               <Form.Item label="Pekerjaan" name="pekerjaan">
                 <Input placeholder="Pekerjaan " />

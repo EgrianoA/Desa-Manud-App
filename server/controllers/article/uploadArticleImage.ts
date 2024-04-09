@@ -27,17 +27,20 @@ const uploadArticleImage = async (req: IRequestWithUserData, res: Response) => {
 
     const headerImages = files.headerImages;
 
-    const uploadFilesResults = await Promise.all(
-      headerImages.map(async (file: Express.Multer.File) => {
-        const uploadedFileRes = await uploadFile(
-          BucketType.Public,
-          "/articles",
-          file.originalname,
-          file.buffer
-        );
-        return uploadedFileRes;
-      })
-    );
+    const uploadFilesResults =
+      headerImages && headerImages.length
+        ? await Promise.all(
+            headerImages.map(async (file: Express.Multer.File) => {
+              const uploadedFileRes = await uploadFile(
+                BucketType.Public,
+                "/articles",
+                file.originalname,
+                file.buffer
+              );
+              return uploadedFileRes;
+            })
+          )
+        : [];
 
     if (uploadFilesResults.length === 0) {
       return res.status(400).json({ message: "file upload failed" });
@@ -53,11 +56,13 @@ const uploadArticleImage = async (req: IRequestWithUserData, res: Response) => {
       deleteUploadedFiles(articleData.headerImage);
     }
 
-    const newArticleImage = uploadFilesResults.map((uploadedFile) => ({
-      ...uploadedFile,
-      alt: "",
-      description: "",
-    }));
+    const newArticleImage = uploadFilesResults
+      ? uploadFilesResults.map((uploadedFile) => ({
+          ...uploadedFile,
+          alt: "",
+          description: "",
+        }))
+      : [];
 
     const updatedArticle = await Article.findByIdAndUpdate(
       articleId,

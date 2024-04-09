@@ -7,7 +7,18 @@ import { ArticleKind, IArticle, useFetchArticles } from "../../../api/articles";
 import ArticleScollPagination from "../../../components/portalPage/portalArticle/articlesScrollPagination";
 
 const ArticleListContainer = styled.div`
-  margin: 40px 30vw;
+  @media only screen and (min-width: 480px) {
+    margin: 40px 20px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin: 40px 10vw;
+  }
+  @media only screen and (min-width: 1200px) {
+    margin: 40px 20vw;
+  }
+  @media only screen and (min-width: 1600px) {
+    margin: 40px 30vw;
+  }
   .ant-image {
     img {
       aspect-ratio: 16/9;
