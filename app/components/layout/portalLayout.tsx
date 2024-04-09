@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Layout,
   Row,
@@ -9,6 +9,7 @@ import {
   MenuProps,
   Avatar,
   Button,
+  Grid,
 } from "antd";
 import styled from "styled-components";
 import Image from "next/image";
@@ -30,6 +31,7 @@ import {
 const { Header, Footer, Content } = Layout;
 
 const { Text } = Typography;
+const { useBreakpoint } = Grid;
 
 interface Props {
   children: React.ReactNode;
@@ -38,6 +40,12 @@ interface Props {
 const StyledMenu = styled(Menu)`
   span {
     font-size: 20px !important;
+  }
+`;
+
+const StyledLogo = styled(Image)`
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -65,7 +73,7 @@ const menuItems = [
       { label: "Informasi Kemitraan", key: "/informasi-kemitraan" },
       { label: "Informasi Keamanan", key: "/cctv" },
     ],
-  }
+  },
 ];
 
 const dropdownItems = [
@@ -107,7 +115,9 @@ const UserColumn = ({
       <DropdownContentContainer>
         <Col style={{ marginRight: "20px" }}>
           <Text style={{ color: "black", fontSize: "20px" }}>
-            {userContext.userFullName}
+            {userContext.userFullName?.length > 10
+              ? `${userContext.userFullName?.substring(0, 10)}...`
+              : userContext.userFullName}
           </Text>
         </Col>
         <Col>
@@ -125,6 +135,7 @@ const UserColumn = ({
 const PortalLayout = ({ children }: Props) => {
   const router = useRouter();
   const userContext = useUserContext();
+  const screens = useBreakpoint();
 
   const redirectMenu = useCallback(
     (path: string) => {
@@ -150,6 +161,27 @@ const PortalLayout = ({ children }: Props) => {
     [router, userContext]
   );
 
+  const contactHeaderColSpan = {
+    xs: 24,
+    xl: 20,
+    xxl: 13,
+  };
+
+  const navHeaderColSpan = {
+    icon: { xs: 3, xxl: 2 },
+    menu: { xs: 14, lg: 16, xl: 17, xxl: 18 },
+    profile: { xs: 7, lg: 5, xl: 4 },
+  };
+
+  const headerPadding = useMemo(() => {
+    if (screens.lg) {
+      return { padding: "0 5vw 0 5vw" };
+    }
+    if (screens.xs || screens.sm) {
+      return { padding: "0 20px 0 20px" };
+    }
+  }, [screens]);
+
   return (
     <Layout>
       <Header
@@ -166,49 +198,62 @@ const PortalLayout = ({ children }: Props) => {
         }}
       >
         <Col span={24} style={{ backgroundColor: "#06163A" }}>
-          <Row style={{ paddingLeft: "15vw", paddingRight: "15vw" }}>
+          <Row style={{ ...headerPadding }}>
             <Col
-              span={13}
+              {...contactHeaderColSpan}
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
                 height: 40,
                 color: "white",
                 fontSize: "18px",
                 padding: "0 30px 0 15px",
               }}
             >
-              <span>
-                <PhoneOutlined style={{ color: "#FF3514" }} /> Hubungi kami:
-                0820 0090 2272{" "}
-              </span>
-              <span>
-                <ClockCircleOutlined style={{ color: "#FF3514" }} /> Waktu
-                operasional: Senin - Jumat 8 pagi - 5 sore{" "}
-              </span>
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: "16px",
+                  marginRight: "20px",
+                }}
+              >
+                <PhoneOutlined
+                  style={{ color: "#FF3514", marginRight: "10px" }}
+                />
+                Hubungi kami: 0150 0090 2272
+              </Text>
+              <Text style={{ color: "white", fontSize: "16px" }}>
+                <ClockCircleOutlined
+                  style={{ color: "#FF3514", marginRight: "10px" }}
+                />
+                Waktu operasional: Senin - Jumat 8 pagi - 5 sore
+              </Text>
             </Col>
           </Row>
           <Row
             style={{
               backgroundColor: "white",
-              paddingLeft: "15vw",
-              paddingRight: "15vw",
+              ...headerPadding,
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               alignItems: "center",
               height: 100,
             }}
           >
-            <Col span={2} style={{ display: "flex", alignItems: "center" }}>
-              <Image
+            <Col
+              {...navHeaderColSpan.icon}
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <StyledLogo
                 src="/Desa manud logo.png"
                 width="80px"
                 height="80px"
                 alt="Desa manud logo"
+                onClick={() => router.push("/")}
               />
             </Col>
-            <Col span={18}>
+            <Col {...navHeaderColSpan.menu}>
               <StyledMenu
                 theme="light"
                 mode="horizontal"
@@ -217,7 +262,7 @@ const PortalLayout = ({ children }: Props) => {
                 onClick={({ key }) => redirectMenu(key)}
               />
             </Col>
-            <Col span={4}>
+            <Col {...navHeaderColSpan.profile}>
               <UserColumn
                 userContext={userContext}
                 onDrawerClick={onDrawerClick}

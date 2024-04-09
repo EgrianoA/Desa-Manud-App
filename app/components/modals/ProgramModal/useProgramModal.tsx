@@ -23,6 +23,7 @@ import {
   getAuthorization,
 } from "../../../utilities/authorization";
 import getFileUrl from "../../../utilities/getFileUrl";
+import { uploadHeaderImage } from "../ArticleModal/useArticleModal";
 
 const programKindOptions = [
   { label: "Kebersihan", value: ArticleKind.Kebersihan },
@@ -111,9 +112,22 @@ const ProgramModal = ({
     [programData?._id, userContext?.token, fileList, router]
   );
 
-  const onDelete = useCallback((id: string) => {
-    console.log(id);
-  }, []);
+  const onDelete = useCallback(
+    async (id: string) => {
+      const response: AxiosResponse<T> = await axios({
+        method: "delete",
+        url: process.env.BE_BASEURL + "/api/articles",
+        data: { id },
+        ...getAuthorization(userContext?.token || ""),
+      }).catch((e) => {
+        return e.response;
+      });
+      if (response?.status === 200) {
+        router.reload();
+      }
+    },
+    [router, userContext?.token]
+  );
 
   return (
     <Modal
@@ -228,6 +242,3 @@ const useProgramModal = () => {
 };
 
 export default useProgramModal;
-function uploadHeaderImage(fileList: any, _id: any, arg2: string) {
-  throw new Error("Function not implemented.");
-}

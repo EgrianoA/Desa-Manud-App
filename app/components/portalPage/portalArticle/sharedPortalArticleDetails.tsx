@@ -10,7 +10,18 @@ import getFileUrl from "../../../utilities/getFileUrl";
 import { isArray } from "lodash/fp";
 
 const ArticleDetailContainer = styled.div`
-  margin: 40px 30vw;
+  @media only screen and (min-width: 480px) {
+    margin: 40px 20px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin: 40px 10vw;
+  }
+  @media only screen and (min-width: 1200px) {
+    margin: 40px 20vw;
+  }
+  @media only screen and (min-width: 1600px) {
+    margin: 40px 30vw;
+  }
   img {
     aspect-ratio: 16/9;
     object-fit: cover;

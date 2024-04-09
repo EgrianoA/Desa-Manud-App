@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ArticleKind, IArticle } from "../../../api/articles";
-import { Card, Col, Row, Image } from "antd";
+import { Card, Col, Row, Image, Grid } from "antd";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import getFileUrl from "../../../utilities/getFileUrl";
@@ -14,6 +14,9 @@ type ArticleScrollPaginationProps = {
   total: number;
   articleKind: ArticleKind;
 };
+
+const { useBreakpoint } = Grid;
+
 const ArticleScollPagination = ({
   articleData,
   page,
@@ -22,6 +25,8 @@ const ArticleScollPagination = ({
   articleKind,
 }: ArticleScrollPaginationProps) => {
   const router = useRouter();
+  const screens = useBreakpoint();
+
   const refresh = useCallback(() => {
     console.log("ON REFRESH");
   }, []);
@@ -50,6 +55,26 @@ const ArticleScollPagination = ({
     }
   }, [articleKind]);
 
+  const cardWidth = useMemo(() => {
+    if (screens.xxl) {
+      return { width: "40vw", marginBottom: "20px" };
+    }
+    if (screens.xl) {
+      return { width: "60vw", marginBottom: "20px" };
+    }
+    if (screens.sm || screens.lg) {
+      return { width: "75vw", marginBottom: "20px" };
+    }
+    if (screens.xs) {
+      return { width: "90vw", marginBottom: "20px" };
+    }
+  }, [screens]);
+
+  const cardSpan = {
+    image: { xs: 8, lg: 6, xl: 5 },
+    content: { xs: 15, lg: 17, xl: 18 },
+  };
+
   return (
     <InfiniteScroll
       dataLength={total} //This is important field to render the next data
@@ -73,20 +98,20 @@ const ArticleScollPagination = ({
             article.title
           }`}
           bordered={false}
-          style={{ width: "40vw", marginBottom: "20px" }}
+          style={{ ...cardWidth }}
           hoverable
           key={article.slugname}
           onClick={() => router.push(`/${articleRouter}/${article.slugname}`)}
         >
           <Row gutter={16}>
-            <Col span={6}>
+            <Col {...cardSpan.image}>
               <Image
                 preview={false}
                 src={getFileUrl(article?.headerImage[0])}
                 alt={article?.headerImage[0]?.alt || ""}
               />
             </Col>
-            <Col span={16} style={{ marginLeft: "20px" }}>
+            <Col {...cardSpan.content} style={{ marginLeft: "20px" }}>
               <p>{shortenContent(article.content.replaceAll("\n", " "))}</p>
             </Col>
           </Row>

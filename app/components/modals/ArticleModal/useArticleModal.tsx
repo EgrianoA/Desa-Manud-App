@@ -23,7 +23,7 @@ import {
 import getFileUrl from "../../../utilities/getFileUrl";
 import sendFileToServer from "../../../api/sendFileToServer";
 
-const uploadHeaderImage = async (
+export const uploadHeaderImage = async (
   fileList: UploadFile[],
   articleId: string,
   token: string
@@ -129,9 +129,22 @@ const ArticleModal = ({
     [articleData?._id, articleKind, fileList, router, userContext?.token]
   );
 
-  const onDelete = useCallback((id: string) => {
-    console.log(id);
-  }, []);
+  const onDelete = useCallback(
+    async (id: string) => {
+      const response: AxiosResponse<T> = await axios({
+        method: "delete",
+        url: process.env.BE_BASEURL + "/api/articles",
+        data: { id },
+        ...getAuthorization(userContext?.token || ""),
+      }).catch((e) => {
+        return e.response;
+      });
+      if (response?.status === 200) {
+        router.reload();
+      }
+    },
+    [router, userContext?.token]
+  );
 
   return (
     <Modal
