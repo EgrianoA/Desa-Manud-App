@@ -10,6 +10,7 @@ import {
   Avatar,
   Button,
   Grid,
+  Breakpoint,
 } from "antd";
 import styled from "styled-components";
 import Image from "next/image";
@@ -88,11 +89,39 @@ const UserColumn = ({
   userContext,
   onDrawerClick,
   onLoginClick,
+  screens,
 }: {
   userContext: IUserContextData | null;
   onDrawerClick: MenuProps["onClick"];
   onLoginClick: () => void;
+  screens: Partial<Record<Breakpoint, boolean>>;
 }) => {
+  console.log(screens);
+  const adjustedUsername = useMemo(() => {
+    if (userContext?.userFullName) {
+      if (screens.xxl) {
+        return userContext.userFullName;
+      }
+      if (screens.xl) {
+        return userContext.userFullName?.length > 15
+          ? `${userContext.userFullName?.substring(0, 15)}...`
+          : userContext.userFullName;
+      }
+      if (screens.lg) {
+        return userContext.userFullName?.length > 12
+          ? `${userContext.userFullName?.substring(0, 12)}...`
+          : userContext.userFullName;
+      }
+      if (screens.xs || screens.sm) {
+        return userContext.userFullName?.length > 10
+          ? `${userContext.userFullName?.substring(0, 10)}...`
+          : userContext.userFullName;
+      }
+    }
+
+    return "";
+  }, [screens, userContext]);
+
   if (!userContext?.token) {
     return (
       <Button
@@ -115,9 +144,7 @@ const UserColumn = ({
       <DropdownContentContainer>
         <Col style={{ marginRight: "20px" }}>
           <Text style={{ color: "black", fontSize: "20px" }}>
-            {userContext.userFullName?.length > 10
-              ? `${userContext.userFullName?.substring(0, 10)}...`
-              : userContext.userFullName}
+            {adjustedUsername}
           </Text>
         </Col>
         <Col>
@@ -241,17 +268,22 @@ const PortalLayout = ({ children }: Props) => {
               height: 100,
             }}
           >
-            <Col
-              {...navHeaderColSpan.icon}
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <StyledLogo
-                src="/Desa manud logo.png"
-                width="80px"
-                height="80px"
-                alt="Desa manud logo"
-                onClick={() => router.push("/")}
-              />
+            <Col {...navHeaderColSpan.icon}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  marginRight: "40px",
+                }}
+              >
+                <StyledLogo
+                  src="/Desa manud logo.png"
+                  width="80px"
+                  height="80px"
+                  alt="Desa manud logo"
+                  onClick={() => router.push("/")}
+                />
+              </div>
             </Col>
             <Col {...navHeaderColSpan.menu}>
               <StyledMenu
@@ -263,11 +295,14 @@ const PortalLayout = ({ children }: Props) => {
               />
             </Col>
             <Col {...navHeaderColSpan.profile}>
-              <UserColumn
-                userContext={userContext}
-                onDrawerClick={onDrawerClick}
-                onLoginClick={onLoginClick}
-              />
+              <div style={{ display: "flex", justifyContent: "end" }}>
+                <UserColumn
+                  userContext={userContext}
+                  onDrawerClick={onDrawerClick}
+                  onLoginClick={onLoginClick}
+                  screens={screens}
+                />
+              </div>
             </Col>
           </Row>
         </Col>
