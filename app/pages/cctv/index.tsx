@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 // Dynamically import ReactPlayer
 const ReactPlayer = dynamic(
-    () => import('react-player'),
+    async () => await import('react-player'),
     { ssr: false } // This line is important. It's what prevents server-side render
 );
 

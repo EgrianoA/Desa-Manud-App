@@ -110,7 +110,7 @@ const ArticleModal = ({
         const response: AxiosResponse<T> = await axios({
           method: "patch",
           url: process.env.BE_BASEURL + "/api/articles",
-          data: { id: articleData._id, ...contentData, type: ArticleKind.Umum },
+          data: { id: articleData._id, ...contentData, type: articleKind },
           ...getAuthorization(userContext?.token || ""),
         }).catch((e) => {
           return e.response;
